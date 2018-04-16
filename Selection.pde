@@ -59,7 +59,7 @@ public class Selection {
 
   void checkSelection(Alien _a) {
     
-    if ( dist(mouseX, mouseY, _a.pos.x, _a.pos.y) <= _a.diameter ) {
+    if ( dist(mouseX, mouseY, _a.pos.x, _a.pos.y) <= _a.diameter/2 ) {
       highlightedAlien = _a;
     } 
 

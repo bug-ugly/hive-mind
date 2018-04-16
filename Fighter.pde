@@ -17,7 +17,7 @@ public class Fighter extends Alien {
   int updateFreq = 1;
   int replayStartSize = 24;
 
-  ArrayList <float []> lastOutputs; // an array to store a number of last actions that are to be rated
+  ArrayList <float []> lastOutputs; // an array to store a number of last world states that are to be rated
   float ratedActionsNum = 10; //number of the last actions that are going to be rated by the player, there needs to be many actions (10) for the neural network precision
   float reward;   //current reward
 

@@ -24,7 +24,7 @@ public class Alien {
   void listenToSound() {
   }
 
-  //each alien can evolve into another stage going through pupil phase
+  //each alien can evolve into another type going through pupal phase
   void evolve ( String evolution, String currentState) {
   }
 
@@ -38,6 +38,7 @@ public class Alien {
   void update() {
     checkWallCollision();
     collisionMove();
+    
   }
 
   void displayStats() {

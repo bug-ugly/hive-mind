@@ -22,10 +22,9 @@ boolean rewardsActive = false; //prevents rewards before the action is done
 //minimum sound level of the mic to be perceived by the aliens
 float minimum_s_level = 0.09;
 
+// select an alien to select evolution 
+// evolve 
 
-//Audio level control -done
-// fix click bug - done
-// add bounding box  - done
 
 void setup() {
   size ( 1280, 720);

@@ -87,7 +87,7 @@ public class DeepQNetwork {
     LastInput = Inputs;
     float[] outputs = DeepQ.FeedForward(Inputs); 
     println(outputs[0] + " " +outputs[1]+ " " +outputs[2]+ " " +outputs[3]+ " " +outputs[4]+ " : ");
-
+    
     double r = random(1.1);
 
     //println ("Epsilon :" +Epsilon + " r : " + r);
