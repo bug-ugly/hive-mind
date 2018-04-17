@@ -17,6 +17,9 @@ FFT fftLin;
 HiveMind player;
 Hud hud;
 
+//F to evolve selected worker into fighter
+//L when the queen is selected to spawn larvae
+
 //prevents rewards before the action is done
 boolean rewardsActive = false; 
 

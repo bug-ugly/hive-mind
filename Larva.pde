@@ -1,13 +1,18 @@
 public class Larva extends Alien {
-  final int larvaDiameter = 5;
-  final int larvaSpeed = 1;
+  final float larvaDiameter = 4;
+  final float larvaSpeed = 0.2;
+  final color larvaColor = color ( 255,0,0);
   
-  public Larva (int _x, int _y ) {
-    pos.x = _x; 
-    pos.y = _y;
+  int growthTimer;
+  
+  public Larva (float _x, float _y ) {
+    pos = new PVector(_x, _y);
     speed = larvaSpeed;
     diameter = larvaDiameter;
     type = "Larva";
+    cor = larvaColor;
+    
+    growthTimer = 200;
   }
   
   public void render(){
@@ -18,6 +23,17 @@ public class Larva extends Alien {
     
   }
   
+  public void update(){
+    super.update();
+    growthTimer --; 
+    if ( growthTimer <= 0){
+      grow();
+    }
+  }
   
+  public void grow(){
+    aliens.add(new Worker(pos.x,pos.y));
+    dead = true; 
+  }
     
 }

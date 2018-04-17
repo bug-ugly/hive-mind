@@ -10,8 +10,6 @@ public class Alien {
   color cor; 
   PVector pos;
   String type;
-  
-  String evolve = "";
 
   int hearing_distance; //how wide is the hearing range of an individual
   
@@ -45,6 +43,9 @@ public class Alien {
     checkWallCollision();
     collisionMove();
     
+  }
+  
+  void produceLarva(){
   }
 
   void backP ( float score) {

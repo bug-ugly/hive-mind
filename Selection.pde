@@ -19,8 +19,8 @@ public class Selection {
     
     resetSelection();
     
-    for ( Alien a : aliens) {
-      
+    for ( int i = 0; i< aliens.size(); i++) {
+      Alien a = aliens.get(i);
       //check if something new was selected or highlighted
       checkSelection(a);
       
@@ -31,6 +31,21 @@ public class Selection {
         ellipse (a.pos.x, a.pos.y,a.diameter - 2, a.diameter - 2);
         if ( a instanceof Fighter){
            a.visualiseNeuralNet();
+        }
+        if ( a instanceof Worker){
+           if (keyPressed){
+             if( key == 'F' || key == 'f'){
+                    a.evolve ("Fighter", a.type);
+                }
+           }
+        }
+        
+        if ( a instanceof Queen){
+           if (keyPressed){
+             if( key == 'L' || key == 'l'){
+                    a.produceLarva();
+                }
+           }
         }
         
       }

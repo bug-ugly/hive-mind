@@ -1,11 +1,11 @@
 public class Worker extends Alien {
-  final float worker_size = 5; 
+  final float worker_size = 7; 
   final float worker_speed = 0.8; 
   final color workerColor = color(0,0,0);
   
   final float fighterRange = 50;
   
-  public Worker(int _x, int _y){
+  public Worker(float _x, float _y){
     type = "Worker";
     diameter = worker_size;
     pos = new PVector (_x, _y);

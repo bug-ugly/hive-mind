@@ -130,5 +130,9 @@ public class Fighter extends Alien {
   void render() {
     super.render();
     ellipse(pos.x, pos.y, diameter, diameter);
+    stroke(0); 
+    for ( float i = 0; i<= TWO_PI; i = i + QUARTER_PI/2){
+    line(pos.x,pos.y, pos.x + diameter*0.7*cos(i), pos.y + diameter*0.7*sin(i)); 
+    }
   }
 }

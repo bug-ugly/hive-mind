@@ -3,13 +3,13 @@ public class PupalStage extends Alien {
   String previousState; 
   String nextState; 
   
-  final int pupaSize = 14; 
+  final int pupaSize = 12; 
   final color pupaColor = color ( 255,0,255);
   
   
   public PupalStage(String _previousState, String _nextState, float[] gene, float _x, float _y) {
     type = "Pupa";
-    incubationCounter = 500;
+    incubationCounter = 200;
     genome = gene;
     previousState = _previousState; 
     nextState = _nextState;
@@ -22,6 +22,7 @@ public class PupalStage extends Alien {
   public void update(){
     super.update();
     incubationCounter--; 
+    println (incubationCounter);
     if (incubationCounter <= 0){
       switch(nextState){
         case "Drone":
