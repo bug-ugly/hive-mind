@@ -19,6 +19,7 @@ public class Worker extends Alien {
     
   }
   
+  
   void avoidFighter(){
     for (Alien a : aliens){
       if (a instanceof Fighter){

@@ -21,7 +21,7 @@ public class Fighter extends Alien {
   float ratedActionsNum = 10; //number of the last actions that are going to be rated by the player, there needs to be many actions (10) for the neural network precision
   float reward;   //current reward
 
-  public Fighter(int _x, int _y) {
+  public Fighter(float _x, float _y) {
     lastOutputs = new ArrayList<float []>();
     RLNet = new DeepQNetwork(_layers, replayMemoryCapacity, discount, epsilon, batchSize, updateFreq, replayStartSize, InputLength, NumActions);
     diameter = fighter_size;

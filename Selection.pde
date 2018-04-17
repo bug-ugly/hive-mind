@@ -29,25 +29,18 @@ public class Selection {
         noFill(); 
         stroke ( selectionColor);
         ellipse (a.pos.x, a.pos.y,a.diameter - 2, a.diameter - 2);
-        a.displayStats();
+        if ( a instanceof Fighter){
+           a.visualiseNeuralNet();
+        }
+        
       }
       if ( a == highlightedAlien) {
         noFill(); 
         stroke ( highlightColor);
         ellipse (a.pos.x, a.pos.y, 2, 2);
       }
-    }
-    
-    
-    //what happens when the fighter is selected
-    if (selectedAlien instanceof Fighter){
-      for ( Alien a : aliens){
-        if ( a == selectedAlien){
-          a.visualiseNeuralNet();
-        }
-      }
-    }
-    
+
+     }
   }
   
   void resetSelection(){

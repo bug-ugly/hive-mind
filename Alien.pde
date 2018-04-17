@@ -10,8 +10,12 @@ public class Alien {
   color cor; 
   PVector pos;
   String type;
+  
+  String evolve = "";
 
   int hearing_distance; //how wide is the hearing range of an individual
+  
+  boolean dead;
 
 //function to produce sound, currently it just draws an indicator whnever alien is to produce a sound
   void produceSound() {
@@ -26,6 +30,8 @@ public class Alien {
 
   //each alien can evolve into another type going through pupal phase
   void evolve ( String evolution, String currentState) {
+    aliens.add( new PupalStage(currentState, evolution, genome, pos.x, pos.y));
+    dead = true; 
   }
 
 //draws an alien according to specifications
@@ -41,14 +47,9 @@ public class Alien {
     
   }
 
-  void displayStats() {
-  }
-
-  void displayActions() {
-  }
-
   void backP ( float score) {
   }
+  
   void visualiseNeuralNet(){
   }
 
@@ -82,7 +83,6 @@ public class Alien {
          float newX = cos(angle + invertion) * speed + pos.x;
          float newY = sin(angle + invertion) * speed + pos.y;
          pos.set(newX, newY, 0.);
-       
     }
   }
 

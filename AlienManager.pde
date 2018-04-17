@@ -8,14 +8,24 @@ class AlienManager {
     }
   }
 
+//update all aliens
   void updateAliens() {
     for ( Alien a : aliens) {
+      clearDead();
       a.update(); 
       a.render();
     }
   }
   
+  
+  //remove the dead aliens
   void clearDead(){
-    
+    for ( Alien a : aliens) {
+      if (a.dead){
+        aliens.remove(a);
+      }
+    }
   }
+  
+  
 }

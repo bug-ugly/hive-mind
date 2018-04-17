@@ -17,14 +17,14 @@ FFT fftLin;
 HiveMind player;
 Hud hud;
 
-boolean rewardsActive = false; //prevents rewards before the action is done
+//prevents rewards before the action is done
+boolean rewardsActive = false; 
 
 //minimum sound level of the mic to be perceived by the aliens
 float minimum_s_level = 0.09;
 
 // select an alien to select evolution 
 // evolve 
-
 
 void setup() {
   size ( 1280, 720);
