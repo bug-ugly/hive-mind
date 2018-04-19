@@ -13,13 +13,16 @@ AlienManager aManager;
 ControlP5 cp5;
 Minim minim;
 AudioInput in; //sound from mic
-//AudioOutput in; //sound from soundcard
+AudioOutput out; //sound from soundcard
 FFT fftLin;
+FFT fftLinOut;
 HiveMind player;
 Hud hud;
 
 //F to evolve selected worker into fighter
 //L when the queen is selected to spawn larvae
+
+// add buttons for the functions
 
 //prevents rewards before the action is done
 boolean rewardsActive = false;
@@ -45,9 +48,14 @@ void setup() {
   //setup sound input from player
   minim = new Minim(this);
   in = minim.getLineIn(); //mic
-  //in = minim.getLineOut(); // soundcard
+  out = minim.getLineOut(); // soundcard
   fftLin = new FFT (in.bufferSize(), in.sampleRate());
   fftLin.linAverages(30);
+  
+  fftLinOut = new FFT (out.bufferSize(), out.sampleRate());
+  fftLinOut.linAverages(30);
+  
+  
 
   hud = new Hud();
 }

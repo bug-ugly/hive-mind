@@ -1,5 +1,5 @@
 class HiveMind {
-   public int commandTimer = 0;
+  public int commandTimer = 0;
   public int commandTimerMax = 100;
   int playerReward = 50;
   
@@ -29,7 +29,8 @@ class HiveMind {
      if(rewardsActive && commandTimer >= commandTimerMax){
       for ( int i = 0; i< aliens.size(); i++){
         if ( aliens.get(i) instanceof Fighter){
-          aliens.get(i).backP(playerReward);
+          //aliens.get(i).backP(playerReward);
+          aliens.get(i).reward = aliens.get(i).reward + playerReward;
           rewardsActive = false;
           //println("yes");
         }
@@ -43,6 +44,7 @@ class HiveMind {
       for ( int i = 0; i< aliens.size(); i++){
         if ( aliens.get(i) instanceof Fighter){
          aliens.get(i).backP(-playerReward);
+          
          rewardsActive = false;
         // gameObjects.get(i).backP(new float [] {-1,1,1,1,1});
         //println("no");

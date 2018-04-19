@@ -4,6 +4,11 @@ public class Worker extends Alien {
   final color workerColor = color(0,0,0);
   
   final float fighterRange = 50;
+
+  //initialization model for a neural network to be used by DeepQNetwork
+  final int [] _layers = new int[] {InputLength, 50, 25, 10, NumActions};
+  final String [] actions = new String [] {"up", "down", "left", "right", "nothing"};
+  
   
   public Worker(float _x, float _y){
     type = "Worker";

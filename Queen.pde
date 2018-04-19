@@ -14,9 +14,6 @@ public class Queen extends Alien {
     type = "Queen";
   }
 
-  void produceLarva() {
-    super.produceLarva();
-    aliens.add(new Larva(pos.x, pos.y));
-  }
+
   
 }
