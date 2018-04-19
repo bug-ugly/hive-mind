@@ -10,7 +10,7 @@ public class Fighter extends Alien {
   final float fighter_size = 10; //visual size of the agent
   final float fighter_speed = 1; // locomotion speed of the agent
 
-  int replayMemoryCapacity = 1024;
+  int replayMemoryCapacity = 100;
   float discount = .99f;
   double epsilon = 1d;
   int batchSize = 1024;
@@ -18,7 +18,7 @@ public class Fighter extends Alien {
   int replayStartSize = 24;
 
   ArrayList <float []> lastOutputs; // an array to store a number of last world states that are to be rated
-  float ratedActionsNum = 10; //number of the last actions that are going to be rated by the player, there needs to be many actions (10) for the neural network precision
+  float ratedActionsNum = 50; //number of the last actions that are going to be rated by the player, there needs to be many actions (10) for the neural network precision
   float reward;   //current reward
 
   public Fighter(float _x, float _y) {
@@ -27,6 +27,7 @@ public class Fighter extends Alien {
     diameter = fighter_size;
     pos = new PVector (_x, _y);
     speed = fighter_speed;
+    
     cor = fighterColor;
     type = "Fighter";
   }

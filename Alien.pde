@@ -29,7 +29,7 @@ public class Alien {
   //each alien can evolve into another type going through pupal phase
   void evolve ( String evolution, String currentState) {
     aliens.add( new PupalStage(currentState, evolution, genome, pos.x, pos.y));
-    dead = true; 
+    aliens.remove(this);
   }
 
 //draws an alien according to specifications

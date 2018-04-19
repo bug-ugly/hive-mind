@@ -12,7 +12,8 @@ Selection selector;
 AlienManager aManager;
 ControlP5 cp5;
 Minim minim;
-AudioInput in;
+AudioInput in; //sound from mic
+//AudioOutput in; //sound from soundcard
 FFT fftLin;
 HiveMind player;
 Hud hud;
@@ -21,7 +22,7 @@ Hud hud;
 //L when the queen is selected to spawn larvae
 
 //prevents rewards before the action is done
-boolean rewardsActive = false; 
+boolean rewardsActive = false;
 
 //minimum sound level of the mic to be perceived by the aliens
 float minimum_s_level = 0.09;
@@ -43,7 +44,8 @@ void setup() {
 
   //setup sound input from player
   minim = new Minim(this);
-  in = minim.getLineIn();
+  in = minim.getLineIn(); //mic
+  //in = minim.getLineOut(); // soundcard
   fftLin = new FFT (in.bufferSize(), in.sampleRate());
   fftLin.linAverages(30);
 

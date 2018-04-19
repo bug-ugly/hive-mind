@@ -5,11 +5,12 @@ public class PupalStage extends Alien {
   
   final int pupaSize = 12; 
   final color pupaColor = color ( 255,0,255);
+  final int incubationTime = 200; 
   
   
   public PupalStage(String _previousState, String _nextState, float[] gene, float _x, float _y) {
     type = "Pupa";
-    incubationCounter = 200;
+    incubationCounter = incubationTime;
     genome = gene;
     previousState = _previousState; 
     nextState = _nextState;
@@ -27,11 +28,11 @@ public class PupalStage extends Alien {
       switch(nextState){
         case "Drone":
           aliens.add(new Drone(pos.x, pos.y));
-          dead = true; 
+          aliens.remove(this);
         break; 
         case "Fighter":
           aliens.add(new Fighter(pos.x,pos.y));
-          dead = true; 
+          aliens.remove(this);
         break; 
       }
     }
