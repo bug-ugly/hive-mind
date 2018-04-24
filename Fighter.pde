@@ -7,10 +7,10 @@ public class Fighter extends Alien {
   
   int nn_update_frequency = 20;
 
-  int replayMemoryCapacity = 100;
+  int replayMemoryCapacity = 10;
   float discount = .99f;
   double epsilon = 1d;
-  int batchSize = 1024;
+  int batchSize = 10;
   int updateFreq = 1;
   int replayStartSize = 24;
 

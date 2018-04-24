@@ -166,8 +166,12 @@ public class Alien {
     reward = reward + score;
     println("REWARD: " + reward);
     //RLNet.ObserveReward(reward, getSoundSpectrum() , GetActionMask());
-    rewardPrevious();
+    rewardPrevious(reward);
     reward = 0;
+  }
+  
+   void backP( String dir) {
+    rewardPrevious(dir);
   }
   
     //needed in case if the grid system will be implemented which would limit the actions available at certain times
@@ -181,9 +185,29 @@ public class Alien {
 
 
   //rewards the last outputs
-  void rewardPrevious() {
+  void rewardPrevious(float rew) {
     for ( int i = 0; i < lastOutputs.size(); i++) {
-      RLNet.ObserveReward(reward, lastOutputs.get(i), GetActionMask());
+      RLNet.ObserveReward(rew, lastOutputs.get(i), GetActionMask());
+    }
+  }
+  
+  //reward in case if the correct action is given by the player
+  void rewardPrevious(String dir) {
+    int act = 4; 
+    if ( dir.equals ("Up")){
+      act = 0;
+    }
+    if ( dir.equals ("Down")){
+      act = 1;
+    }
+    if ( dir.equals ("Left")){
+      act = 2;
+    }
+    if ( dir.equals ("Right")){
+      act = 3;
+    }
+    for ( int i = 0; i < lastOutputs.size(); i++) {
+      RLNet.correctAction(act, lastOutputs.get(i), GetActionMask());
     }
   }
 

@@ -18,7 +18,6 @@ class AlienManager {
     }
   }
   
-  
   //remove the dead aliens
   void clearDead(){
     for (int i = 0; i< aliens.size(); i++) {
@@ -28,6 +27,5 @@ class AlienManager {
       }
     }
   }
-  
   
 }

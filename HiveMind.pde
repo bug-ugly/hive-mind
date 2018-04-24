@@ -54,5 +54,13 @@ class HiveMind {
      }
   }
   
-  
+  void sayDirection ( String dir){
+    if ( rewardsActive ){
+      for ( int i = 0; i< aliens.size(); i++){
+        if ( aliens.get(i) instanceof Fighter){
+          aliens.get(i). backP (dir);
+        }
+      }
+    }
+  }
 }

@@ -120,6 +120,10 @@ public class DeepQNetwork {
     }
   }
 
+  void correctAction ( int act, float[]NextInputs, int NextActionMask[]){
+    LastAction = act; 
+    ObserveReward (100, NextInputs, NextActionMask);
+  }
 
   float[][] CombineInputs(Replay replays[]) {
     float[][] retVal = new float[replays.length][InputLength];
