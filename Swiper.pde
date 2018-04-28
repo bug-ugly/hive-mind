@@ -72,7 +72,9 @@ class Swiper{
 }
 
 void mouseDragged(){
+  if(mouseY < height-70){ //only register swipe event when not intercepting the levels control bar
  swipeController.swipeEvent();
+  }
 }
 
 void mouseReleased(){

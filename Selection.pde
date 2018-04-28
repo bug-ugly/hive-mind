@@ -32,21 +32,7 @@ public class Selection {
         if ( a instanceof Fighter){
            a.visualiseNeuralNet();
         }
-        if ( a instanceof Worker){
-           if (keyPressed){
-             if( key == 'F' || key == 'f'){
-                    a.evolve ("Fighter", a.type);
-                }
-           }
-        }
         
-        if ( a instanceof Queen){
-           if (keyPressed){
-             if( key == 'L' || key == 'l'){
-                    a.produceLarva();
-                }
-           }
-        }
         
       }
       if ( a == highlightedAlien) {
@@ -61,8 +47,22 @@ public class Selection {
   void resetSelection(){
     highlightedAlien = null;
     if (mousePressed){
+      if ( mouseX > 80 && mouseX <300 && mouseY > 80 && mouseX < 300){ //ignore the interface bit
+      }
+      else{
       selectedAlien = null;
+      hud.removeControls();
+      }
     }
+  }
+  
+  void executeSelectedAlienFunction(int functionId){
+     for ( int i = 0; i< aliens.size(); i++) {
+      Alien a = aliens.get(i);
+      if ( a == selectedAlien) {
+        a.executeFunction(functionId);
+      }
+     }
   }
 
   void checkSelection(Alien _a) {
@@ -74,6 +74,15 @@ public class Selection {
     if (mousePressed) {
       if (highlightedAlien == _a) {
         selectedAlien = _a;
+        if ( _a instanceof Worker){
+          
+           hud.createControls(_a);
+        }
+        
+        if ( _a instanceof Queen){
+           
+           hud.createControls(_a);
+        }
       } 
     }
   }

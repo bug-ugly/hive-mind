@@ -11,6 +11,9 @@ class Hud{
   final int highlightedY = 70; 
   final int selectedTextSize = 10; 
   final int highlightedTextSize = 10; 
+  
+  
+  final int controlsY = 200;
 
   public Hud(){
     createSoundLevelControl();
@@ -21,6 +24,7 @@ class Hud{
     showSelectedText(); 
     showHighlightedText();
   }
+  
   
   //control the sensitivity of the microphone in order to remove the unnecessary noise
   void showSelectedText(){
@@ -57,6 +61,8 @@ class Hud{
    //text ( "levels: " + current_level,levelsX, levelsY + 30);
   }
   
+
+  
   void createSoundLevelControl(){
     cp5.addSlider("minimum_s_level")
      .setPosition(levelsX,levelsY)
@@ -69,5 +75,43 @@ class Hud{
   void slider(float level) {
   minimum_s_level = level;
 }
+
+  void createControls ( Alien a){
+    String [] controlsNum = a.controls;
+    removeControls();
+    Group g1 = cp5.addGroup("g1")
+                .setPosition(100,100)
+                .setBackgroundHeight(100)
+                .setBackgroundColor(color(255,50))
+                ;
+    
+    for (int i = 0; i< controlsNum.length; i++){
+        cp5.addButton(controlsNum[i])
+       .setPosition(0, 0 + i * 20)
+       .setId(i)
+       .setGroup(g1);
+    }
   
+ 
+  }
+  
+  void removeControls(){
+    try{
+    cp5.remove("g1");
+    } catch (NullPointerException e) {
+    e.printStackTrace();
+    }
+  }
+  
+  void buttonPressed(int id){
+    selector.executeSelectedAlienFunction(id);
+  }
+}
+
+void controlEvent(ControlEvent theEvent) {
+    
+    if(theEvent.controller() instanceof Button) {
+  hud.buttonPressed(theEvent.getController().getId());
+    
+    }
 }

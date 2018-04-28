@@ -12,6 +12,18 @@ public class Queen extends Alien {
     cor = queenColor;
     biomassCount = bioCount;
     type = "Queen";
+    controls = new String[] {"CreateLarvae"};
+  }
+  
+  void executeFunction(int functionId){
+    super.executeFunction(functionId);
+    switch(controls[functionId]){
+      case ("CreateLarvae"):
+        produceLarva();
+      break;
+      
+      
+    }
   }
 
 

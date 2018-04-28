@@ -7,12 +7,12 @@ public class Fighter extends Alien {
   
   int nn_update_frequency = 20;
 
-  int replayMemoryCapacity = 10;
+  int replayMemoryCapacity = 12;
   float discount = .99f;
   double epsilon = 1d;
-  int batchSize = 10;
+  int batchSize = 12;
   int updateFreq = 1;
-  int replayStartSize = 24;
+  int replayStartSize = 12;
 
  
 
@@ -24,6 +24,7 @@ public class Fighter extends Alien {
     speed = fighter_speed;
     cor = fighterColor;
     type = "Fighter";
+    
   }
 
   void update() {

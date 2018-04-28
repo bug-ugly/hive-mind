@@ -11,6 +11,8 @@ ArrayList <Alien> aliens;
 Selection selector;
 AlienManager aManager;
 ControlP5 cp5;
+ControlP5 queenControls;
+ControlP5 workerControls;
 Minim minim;
 AudioInput in; //sound from mic
 AudioOutput out; //sound from soundcard
@@ -38,7 +40,7 @@ void setup() {
   size ( 1280, 720);
   cp5 = new ControlP5(this);
   player = new HiveMind();
-
+  
   //placing initial aliens
   aliens = new ArrayList <Alien>(); 
   aManager = new AlienManager();

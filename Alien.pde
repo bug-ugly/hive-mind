@@ -24,7 +24,7 @@ public class Alien {
   //initialization model for a neural network to be used by DeepQNetwork
   final int [] _layers = new int[] {InputLength, 50, 25, 10, NumActions};
  
-  
+  String []controls;
 
 //function to produce sound, currently it just draws an indicator whnever alien is to produce a sound
   void produceSound() {
@@ -33,6 +33,9 @@ public class Alien {
     ellipse (pos.x, pos.y, diameter + 5, diameter + 5);
   }
 
+  void executeFunction(int functionId){
+    
+  }
   
   void listenToSound() {
   }

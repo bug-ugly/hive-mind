@@ -16,6 +16,7 @@ public class Worker extends Alien {
     pos = new PVector (_x, _y);
     speed = worker_speed;
     cor = workerColor;
+    controls = new String[] {"EvolveIntoFighter", "EvolveIntoDrone"};
   }
   
   void update(){
@@ -24,6 +25,18 @@ public class Worker extends Alien {
     
   }
   
+  void executeFunction(int functionId){
+    super.executeFunction(functionId);
+    switch(controls[functionId]){
+      case ("EvolveIntoFighter"):
+        evolve("Fighter", type);
+      break;
+      case ("EvolveIntoDrone"):
+        evolve("Drone", type);
+      break;
+      
+    }
+  }
   
   void avoidFighter(){
     for (Alien a : aliens){
