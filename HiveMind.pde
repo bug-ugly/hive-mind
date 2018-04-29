@@ -1,9 +1,10 @@
-class HiveMind {
+class HiveMind{
   public int commandTimer = 0;
   public int commandTimerMax = 100;
   int playerReward = 50;
-  
+
   HiveMind() {
+   
   }
   
   void checkKeys(){
@@ -63,4 +64,6 @@ class HiveMind {
       }
     }
   }
+  
+ 
 }

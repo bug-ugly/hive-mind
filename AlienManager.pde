@@ -24,6 +24,7 @@ class AlienManager {
       Alien a = aliens.get(i);
       if (a.dead){
         aliens.remove(a);
+        a.removeObserver(tutorial);
       }
     }
   }

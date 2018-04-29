@@ -12,14 +12,16 @@ public class Queen extends Alien {
     cor = queenColor;
     biomassCount = bioCount;
     type = "Queen";
-    controls = new String[] {"CreateLarvae"};
+    controls = new String[] {"Spawn Larvae"};
+    this.registerObserver(tutorial);
   }
   
   void executeFunction(int functionId){
     super.executeFunction(functionId);
     switch(controls[functionId]){
-      case ("CreateLarvae"):
+      case ("Spawn Larvae"):
         produceLarva();
+        setEvent("EVENT_PRODUCE_LARVAE");
       break;
       
       

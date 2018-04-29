@@ -24,6 +24,9 @@ public class Fighter extends Alien {
     speed = fighter_speed;
     cor = fighterColor;
     type = "Fighter";
+    this.registerObserver(tutorial);
+    
+    controls = new String[] {};
     
   }
 

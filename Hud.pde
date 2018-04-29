@@ -109,9 +109,8 @@ class Hud{
 }
 
 void controlEvent(ControlEvent theEvent) {
-    
-    if(theEvent.controller() instanceof Button) {
-  hud.buttonPressed(theEvent.getController().getId());
-    
+    //theEvent.getController().getParent().getName();
+    if(theEvent.getController() instanceof Button) {
+      hud.buttonPressed(theEvent.getController().getId());
     }
 }

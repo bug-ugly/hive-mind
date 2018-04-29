@@ -1,8 +1,11 @@
 
 //class to manage selection and highlight on mouse hover/click
-public class Selection {
+public class Selection implements Subject {
   Alien selectedAlien; //index of a selected alien
   Alien highlightedAlien; //index of a highlighted alien
+  
+  private ArrayList <Observer> observers = new ArrayList <Observer>();
+  private String event; 
 
   final color selectionColor = color (255, 255, 255); 
   final color highlightColor = color (255, 255, 255);
@@ -10,6 +13,7 @@ public class Selection {
   //boolean values to check if something was selected/hughlighted
 
   Selection() {
+    this.registerObserver(tutorial);
   }
 
   void update() {
@@ -47,11 +51,10 @@ public class Selection {
   void resetSelection(){
     highlightedAlien = null;
     if (mousePressed){
-      if ( mouseX > 80 && mouseX <300 && mouseY > 80 && mouseX < 300){ //ignore the interface bit
-      }
-      else{
+      if (mouseButton == RIGHT){
       selectedAlien = null;
       hud.removeControls();
+      setEvent("EVENT_ALIEN_DESELECTED");
       }
     }
   }
@@ -77,13 +80,44 @@ public class Selection {
         if ( _a instanceof Worker){
           
            hud.createControls(_a);
+           setEvent("EVENT_WORKER_SELECTED");
         }
         
         if ( _a instanceof Queen){
            
            hud.createControls(_a);
+           setEvent("EVENT_QUEEN_SELECTED");
+        }
+        
+         if ( _a instanceof Fighter){
+           
+           hud.createControls(_a);
+           setEvent("EVENT_FIGHTER_SELECTED");
         }
       } 
     }
   }
+  
+   //events for the observers
+   public void setEvent(String event){
+      this.event = event;
+      notifyObservers();
+    }
+    
+    @Override 
+  public void registerObserver(Observer observer){
+    observers.add(observer);
+  }
+  
+  @Override 
+  public void removeObserver(Observer observer){
+    observers.remove(observer);
+  }
+  
+  @Override 
+  public void notifyObservers (){
+    for (Observer ob : observers){
+      ob.update(this.event); 
+    }
+}
 }

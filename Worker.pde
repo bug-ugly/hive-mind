@@ -16,7 +16,8 @@ public class Worker extends Alien {
     pos = new PVector (_x, _y);
     speed = worker_speed;
     cor = workerColor;
-    controls = new String[] {"EvolveIntoFighter", "EvolveIntoDrone"};
+    controls = new String[] {"Evolve Fighter", "Evolve Drone"};
+    this.registerObserver(tutorial);
   }
   
   void update(){
@@ -28,10 +29,11 @@ public class Worker extends Alien {
   void executeFunction(int functionId){
     super.executeFunction(functionId);
     switch(controls[functionId]){
-      case ("EvolveIntoFighter"):
+      case ("Evolve Fighter"):
+        setEvent("EVENT_EVOLVE_W_INTO_F");
         evolve("Fighter", type);
       break;
-      case ("EvolveIntoDrone"):
+      case ("Evolve Drone"):
         evolve("Drone", type);
       break;
       

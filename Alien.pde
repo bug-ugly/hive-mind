@@ -1,4 +1,8 @@
-public class Alien {
+public class Alien implements Subject{
+  
+   private ArrayList <Observer> observers = new ArrayList <Observer>();
+  private String event; 
+  
   float [] genome; //all stats of an alien, in order to implement genetics
   DeepQNetwork RLNet; //neural net
 
@@ -44,6 +48,7 @@ public class Alien {
   void evolve ( String nextState, String currentState) {
     aliens.add( new PupalStage(currentState, nextState , genome, pos.x, pos.y));
     aliens.remove(this);
+    this.removeObserver(tutorial);
   }
 
 //draws an alien according to specifications
@@ -199,15 +204,19 @@ public class Alien {
     int act = 4; 
     if ( dir.equals ("Up")){
       act = 0;
+      setEvent("EVENT_SWIPE_UP");
     }
     if ( dir.equals ("Down")){
       act = 1;
+       setEvent("EVENT_SWIPE_DOWN");
     }
     if ( dir.equals ("Left")){
       act = 2;
+       setEvent("EVENT_SWIPE_LEFT");
     }
     if ( dir.equals ("Right")){
       act = 3;
+       setEvent("EVENT_SWIPE_RIGHT");
     }
     for ( int i = 0; i < lastOutputs.size(); i++) {
       RLNet.correctAction(act, lastOutputs.get(i), GetActionMask());
@@ -231,4 +240,27 @@ public class Alien {
   void moveDown() {
     pos.y  = pos.y + speed;
   }
+  
+   //events for the observers
+   public void setEvent(String event){
+      this.event = event;
+      notifyObservers();
+    }
+    
+     @Override 
+  public void registerObserver(Observer observer){
+    observers.add(observer);
+  }
+  
+  @Override 
+  public void removeObserver(Observer observer){
+    observers.remove(observer);
+  }
+  
+  @Override 
+  public void notifyObservers (){
+    for (Observer ob : observers){
+      ob.update(this.event); 
+    }
+}
 }
