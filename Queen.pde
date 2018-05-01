@@ -1,3 +1,4 @@
+//queen that spawns larvae
 public class Queen extends Alien {
   int biomassCount; //defines how many nutrients the queen has
   

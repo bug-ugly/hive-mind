@@ -79,7 +79,7 @@ class Hud{
   void createControls ( Alien a){
     String [] controlsNum = a.controls;
     removeControls();
-    Group g1 = cp5.addGroup("g1")
+    Group g1 = cp5.addGroup("Controls")
                 .setPosition(100,100)
                 .setBackgroundHeight(100)
                 .setBackgroundColor(color(255,50))
@@ -97,7 +97,7 @@ class Hud{
   
   void removeControls(){
     try{
-    cp5.remove("g1");
+    cp5.remove("Controls");
     } catch (NullPointerException e) {
     e.printStackTrace();
     }

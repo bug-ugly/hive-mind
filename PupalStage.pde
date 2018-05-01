@@ -1,3 +1,4 @@
+//intermediate evolution stage
 public class PupalStage extends Alien {
   int incubationCounter;
   String previousState; 

@@ -34,11 +34,10 @@ public class Fighter extends Alien {
     //println(in.left.level());
     super.update();
        fighterListen();
-       
-      
-  
+
   }
   
+  //function to respond to sounds from player
   void fighterListen(){
      if ((in.left.level() + in.right.level()) /2 >minimum_s_level) {
       rewardsActive = true;

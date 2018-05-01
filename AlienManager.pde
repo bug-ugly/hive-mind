@@ -24,7 +24,7 @@ class AlienManager {
       Alien a = aliens.get(i);
       if (a.dead){
         aliens.remove(a);
-        a.removeObserver(tutorial);
+        a.removeObserver(tutorial); //important to remove the observers in order to preserve framerate
       }
     }
   }

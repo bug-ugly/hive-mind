@@ -7,20 +7,21 @@ public class Alien implements Subject{
   DeepQNetwork RLNet; //neural net
 
   //stats variables, perhaps to be replaces by genome
-  float speed;
-  float velocity; 
-  float direction; 
-  float diameter; 
-  color cor; 
-  PVector pos;
-  String type;
+  float speed; //speed of an agent
+  float velocity;  //velocity at which the agent is moving
+  float direction;  // movement direction of the agent
+  float diameter;  // size
+  color cor;  //color
+  PVector pos; //current position
+  String type; //type of an agent: Queen, Worker, Fighter, etc.
+  int biomassValue; //how much biomass is going to be dropped on agent death
 
   int hearing_distance; //how wide is the hearing range of an individual
   
-  boolean dead;
+  boolean dead; //checking the dead aliens and preparing them for cleanup
   
   float reward;   //current reward
-   ArrayList <float []> lastOutputs; // an array to store a number of last world states that are to be rated
+  ArrayList <float []> lastOutputs; // an array to store a number of last world states that are to be rated
   float ratedActionsNum = 50; //number of the last actions that are going to be rated by the player, there needs to be many actions (10) for the neural network precision
   final int InputLength = 513; //the size of the input that the agent receives. the sound spectrum is the total of 513 numbers
   final int NumActions = 5; //total number of actions that the agent can perform: move right, left,up, etc.
@@ -28,7 +29,7 @@ public class Alien implements Subject{
   //initialization model for a neural network to be used by DeepQNetwork
   final int [] _layers = new int[] {InputLength, 50, 25, 10, NumActions};
  
-  String []controls;
+  String []controls; //options which will appear as buttons on the top left when the agent is selected, view the child classes for reference
 
 //function to produce sound, currently it just draws an indicator whnever alien is to produce a sound
   void produceSound() {
@@ -37,6 +38,8 @@ public class Alien implements Subject{
     ellipse (pos.x, pos.y, diameter + 5, diameter + 5);
   }
 
+  
+  //executes the function when one of the control buttons is pressed
   void executeFunction(int functionId){
     
   }
@@ -61,7 +64,7 @@ public class Alien implements Subject{
   void update() {
     checkWallCollision();
     collisionMove();
-    
+    checkObstacleCollision(); 
   }
   
     void performAction(int t) {
@@ -133,8 +136,9 @@ public class Alien implements Subject{
          //calculate a vector pointing away from the target
          float angle = atan2(checkCollision().pos.y - pos.y, checkCollision().pos.x - pos.x);
          //update positions
-         float newX = cos(angle + invertion) * speed + pos.x;
-         float newY = sin(angle + invertion) * speed + pos.y;
+         direction = angle + invertion;
+         float newX = cos(direction) * speed + pos.x;
+         float newY = sin(direction) * speed + pos.y;
          pos.set(newX, newY, 0.);
     }
   }
@@ -226,19 +230,32 @@ public class Alien implements Subject{
   
   //actions to be selected by the output of the neural network
   void moveUp() {
-    pos.y = pos.y - speed;
+          direction = PI + PI/2;
+          float newX = cos(direction) * speed + pos.x;
+         float newY = sin(direction) * speed + pos.y;
+         pos.set(newX, newY, 0.);
   }
 
   void moveLeft() {
-    pos.x = pos.x - speed;
+        direction = PI;
+          float newX = cos( direction) * speed + pos.x;
+         float newY = sin( direction) * speed + pos.y;
+         pos.set(newX, newY, 0.);
   }
 
   void moveRight() {
-    pos.x = pos.x+speed;
+          direction = 0;
+         float newX = cos(direction) * speed + pos.x;
+         float newY = sin(direction) * speed + pos.y;
+         pos.set(newX, newY, 0.);
   }
 
   void moveDown() {
-    pos.y  = pos.y + speed;
+       direction = PI/2; 
+       
+         float newX = cos(direction) * speed + pos.x;
+         float newY = sin(direction) * speed + pos.y;
+         pos.set(newX, newY, 0.);
   }
   
    //events for the observers
@@ -247,6 +264,20 @@ public class Alien implements Subject{
       notifyObservers();
     }
     
+  void checkObstacleCollision(){
+    //reverse movement when colliding with obstacles
+    for ( int i = 0; i < obstacles.size(); i++){
+      Obstacle o = obstacles.get(i); 
+       if ( o.checkObstacleCollision(this)){
+         float invertion = PI;
+         direction = direction + invertion;
+         float newX = cos(direction) * speed + pos.x;
+         float newY = sin(direction) * speed + pos.y;
+         pos.set(newX, newY, 0.);
+       }
+    }
+  }
+  
      @Override 
   public void registerObserver(Observer observer){
     observers.add(observer);

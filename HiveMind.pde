@@ -1,4 +1,6 @@
 class HiveMind{
+  //player commands class
+  
   public int commandTimer = 0;
   public int commandTimerMax = 100;
   int playerReward = 50;
@@ -55,6 +57,7 @@ class HiveMind{
      }
   }
   
+  //report direction of a swipe to the fighter
   void sayDirection ( String dir){
     if ( rewardsActive ){
       for ( int i = 0; i< aliens.size(); i++){

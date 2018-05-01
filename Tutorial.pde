@@ -58,35 +58,35 @@ class Tutorial implements Observer{
      switch (tutorialPart){
        case 0:
        //select the queen
-       tutorialText ="select the queen";
+       tutorialText ="The black circle in the center of the screen is the queen. You can select her by clicking on her. Now try to select the queen";
        break; 
        
        case 1:
        //deselect by right clicking
-        tutorialText ="deselect by right clicking";
+        tutorialText ="The queen is now selected. You can deselect her by right clicking anywhere. Try that now.";
        break; 
        case 2:
        //produce larvae
-        tutorialText ="select the queen and click the button on the top left to produce larvae. Create 3 of them. They will grow rapidly to become Workers. ";
+        tutorialText ="Good. Now select the queen again and click the button on the top left to produce larvae. Create 3 of them. They will grow rapidly to become Workers. ";
        break;
        case 3:
        //select one of the workers and evolve it into a fighter
-        tutorialText ="select one of the workers and evolve it into a fighter by pressing a button on the top left";
+        tutorialText ="Now that all workers have hatched, select one of the workers and evolve it into a fighter by pressing a button on the top left";
        break;
        
        case 4:
         //wait for the fighter to hatch
-         tutorialText ="Fighter is hatching";
+         tutorialText =" A Fighter is hatching...";
        break; 
        case 5:
         //Fighter responds to the sounds from the mic and also mouse drags. Hold left mouse button and drag to the right. 
-         tutorialText ="We now have a Fighter. Fighter responds to the sounds from the mic and also mouse drags. Hold left mouse button and drag to the right. ";
+         tutorialText ="We now have a Fighter. Fighter responds to the sounds from the mic and also mouse drags in one of four directions. Hold left mouse button and drag to the right. ";
        break; 
         case 6:
         //Dragging the mouse changes reaction of an alien to the previous sounds. Mouse drags show alien the direction you wanted it to go in response to a sound. Producing a sound and dragging a mouse afterwards will show the alien where you wanted it to go. Like this, it is possible to teach aliens to move around.  
-       tutorialText ="Dragging the mouse changes reaction of an alien to the previous sounds. Mouse drags show alien the direction you wanted it to go in response to a sound. Producing a sound and dragging a mouse afterwards will show the alien where you wanted it to go. Like this, it is possible to teach aliens to move around.";
+       tutorialText ="Dragging the mouse in a direction teaches a Fighter to respond to previous sounds by going in the direction in a drag. It might take several attempts for a Fighter to learn. Producing a sound and then dragging is a way of teaching it.";
       lastStepTimer ++; 
-      if(lastStepTimer > 500){
+      if(lastStepTimer > 700){
         tutorialText ="";
       }
        break; 

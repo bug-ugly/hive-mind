@@ -1,3 +1,4 @@
+//controlling the swipe direction and shape
 class Swiper{
   ArrayList <PVector> mouseCoordinates;
   boolean swiping;
@@ -23,6 +24,7 @@ class Swiper{
     }
   }
   
+  //adding new coordinates to the swipe
  void swipeEvent(){
     if (swiping == false){
      mouseCoordinates = new ArrayList <PVector>();
@@ -31,6 +33,7 @@ class Swiper{
   mouseCoordinates.add( new PVector ( mouseX, mouseY));
  }
  
+ //end of the swipe
  void swipeFinished(){
    if (swiping){
     determineSwipe(mouseCoordinates);
@@ -39,6 +42,7 @@ class Swiper{
   }
  }
   
+  //end swipe calculation and determining the direction
   void determineSwipe(ArrayList <PVector> coordinates){
     String swipe = "";
     if ( coordinates != null){
@@ -65,6 +69,7 @@ class Swiper{
     sendSwipe(swipe);
   }
   
+  //sending the calculated direction to the player 
   void sendSwipe(String swipe){
     println(swipe);
     player.sayDirection(swipe);

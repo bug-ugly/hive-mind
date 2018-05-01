@@ -1,3 +1,4 @@
+//state of an alien when hatched
 public class Larva extends Alien {
   final float larvaDiameter = 4;
   final float larvaSpeed = 0.2;

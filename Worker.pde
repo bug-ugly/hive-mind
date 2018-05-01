@@ -48,8 +48,9 @@ public class Worker extends Alien {
          //calculate an angle of a vector pointing towads the target
          float angle = atan2(a.pos.y - pos.y, a.pos.x - pos.x);
          //update positions adding PI to the angle inverting it
-         float newX = cos(angle + invertion) * speed + pos.x;
-         float newY = sin(angle + invertion) * speed + pos.y;
+         direction = angle + invertion;
+         float newX = cos(direction) * speed + pos.x;
+         float newY = sin(direction) * speed + pos.y;
          pos.set(newX, newY, 0.);
         }
       }

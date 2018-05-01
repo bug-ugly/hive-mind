@@ -68,6 +68,7 @@ public class DeepQNetwork {
     return maxVal;
   }
 
+  //finding the action that got max points
   int FindActionMax(float[] NetOutputs, int ActionMask[]) {
 
     float maxVal = NetOutputs[0];

@@ -8,6 +8,8 @@ import ddf.minim.analysis.FFT;
 import controlP5.*;
 
 ArrayList <Alien> aliens; 
+ArrayList <Obstacle> obstacles;
+
 Selection selector;
 AlienManager aManager;
 ControlP5 cp5;
@@ -21,8 +23,7 @@ FFT fftLinOut;
 HiveMind player;
 Hud hud;
 Swiper swipeController;
-
-
+GameLevel level;
 Tutorial tutorial;
 //F to evolve selected worker into fighter
 //L when the queen is selected to spawn larvae
@@ -43,13 +44,11 @@ void setup() {
   
   tutorial = new Tutorial();
   player = new HiveMind();
-  
+  level = new GameLevel(); 
   //placing initial aliens
   aliens = new ArrayList <Alien>(); 
+
   aManager = new AlienManager();
-
-
-
 
   //selected alien manager
   selector = new Selection();
@@ -64,8 +63,6 @@ void setup() {
   fftLinOut = new FFT (out.bufferSize(), out.sampleRate());
   fftLinOut.linAverages(30);
 
-  
-
   hud = new Hud();
 }
 
@@ -73,11 +70,14 @@ void draw() {
   background(255);
   //game loop
         aManager.updateAliens();
+       level. update();
         player.update();
         selector.update();
         hud.update();
         swipeController.update();
         tutorial.playTutorial();
+        level.render();
+        
   
 }
 
