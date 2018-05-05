@@ -21,17 +21,20 @@ AudioOutput out; //sound from soundcard
 FFT fftLin;
 FFT fftLinOut;
 HiveMind player;
-Hud hud;
+Hud hud; 
 Swiper swipeController;
 GameLevel level;
 Tutorial tutorial;
-//F to evolve selected worker into fighter
-//L when the queen is selected to spawn larvae
 
-// add buttons for the functions
+
+// breeding , feeding , herding, focus on basic behaviours 
+//focus on basic behaviours before making it more complex 
+//important to make various levels and implement a good tutorial so the application would be more "complete"
 
 //prevents rewards before the action is done
 boolean rewardsActive = false;
+
+boolean godMode = false;
 
 //minimum sound level of the mic to be perceived by the aliens
 float minimum_s_level = 0.09;
@@ -41,7 +44,7 @@ String gameState = "startScreen";
 void setup() {
   size ( 1280, 720);
   cp5 = new ControlP5(this);
-  
+
   tutorial = new Tutorial();
   player = new HiveMind();
   level = new GameLevel(); 
@@ -59,7 +62,7 @@ void setup() {
   out = minim.getLineOut(); // soundcard
   fftLin = new FFT (in.bufferSize(), in.sampleRate());
   fftLin.linAverages(30);
-  
+
   fftLinOut = new FFT (out.bufferSize(), out.sampleRate());
   fftLinOut.linAverages(30);
 
@@ -69,16 +72,14 @@ void setup() {
 void draw() {
   background(255);
   //game loop
-        aManager.updateAliens();
-       level. update();
-        player.update();
-        selector.update();
-        hud.update();
-        swipeController.update();
-        tutorial.playTutorial();
-        level.render();
-        
-  
+  aManager.updateAliens();
+  level. update();
+  player.update();
+  selector.update();
+  hud.update();
+  swipeController.update();
+  tutorial.playTutorial();
+  level.render();
 }
 
 //function to get a row of an array

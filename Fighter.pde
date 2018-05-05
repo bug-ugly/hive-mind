@@ -1,10 +1,10 @@
 public class Fighter extends Alien {
-  
-  
+
+
   final color fighterColor = color(0, 0, 0);
   final float fighter_size = 10; //visual size of the agent
   final float fighter_speed = 1; // locomotion speed of the agent
-  
+
   int nn_update_frequency = 20;
 
   int replayMemoryCapacity = 12;
@@ -14,7 +14,7 @@ public class Fighter extends Alien {
   int updateFreq = 1;
   int replayStartSize = 12;
 
- 
+
 
   public Fighter(float _x, float _y) {
     lastOutputs = new ArrayList<float []>();
@@ -25,21 +25,41 @@ public class Fighter extends Alien {
     cor = fighterColor;
     type = "Fighter";
     this.registerObserver(tutorial);
-    
+
     controls = new String[] {};
-    
   }
 
   void update() {
     //println(in.left.level());
     super.update();
-       fighterListen();
-
+    if (godMode){
+      godMode();
+    }
+    else{
+      fighterListen();
+    }
   }
-  
+
+  void godMode() {
+    if ( keyPressed){
+      if ( keyCode == UP) {
+        performAction(0) ; 
+      }
+      if ( keyCode == DOWN) {
+        performAction(1) ; 
+      }
+      if ( keyCode == LEFT) {
+        performAction(2) ; 
+      }
+      if ( keyCode == RIGHT) {
+        performAction(3) ; 
+      }
+      
+    }
+  }
   //function to respond to sounds from player
-  void fighterListen(){
-     if ((in.left.level() + in.right.level()) /2 >minimum_s_level) {
+  void fighterListen() {
+    if ((in.left.level() + in.right.level()) /2 >minimum_s_level) {
       rewardsActive = true;
       int top = RLNet.GetAction(getSoundSpectrum(in), GetActionMask()); //get the action from nn
       lastOutputs.add(getSoundSpectrum(in)); //add the action to the list of last outputs
@@ -54,8 +74,8 @@ public class Fighter extends Alien {
     super.render();
     ellipse(pos.x, pos.y, diameter, diameter);
     stroke(0); 
-    for ( float i = 0; i<= TWO_PI; i = i + QUARTER_PI/2){
-    line(pos.x,pos.y, pos.x + diameter*0.7*cos(i), pos.y + diameter*0.7*sin(i)); 
+    for ( float i = 0; i<= TWO_PI; i = i + QUARTER_PI/2) {
+      line(pos.x, pos.y, pos.x + diameter*0.7*cos(i), pos.y + diameter*0.7*sin(i));
     }
   }
 }

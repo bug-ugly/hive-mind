@@ -8,7 +8,7 @@ class AlienManager {
     //}
   }
 
-//update all aliens
+  //update all aliens
   void updateAliens() {
     for ( int i = 0; i< aliens.size(); i++) {
       Alien a = aliens.get(i);
@@ -17,16 +17,15 @@ class AlienManager {
       clearDead();
     }
   }
-  
+
   //remove the dead aliens
-  void clearDead(){
+  void clearDead() {
     for (int i = 0; i< aliens.size(); i++) {
       Alien a = aliens.get(i);
-      if (a.dead){
+      if (a.dead) {
         aliens.remove(a);
         a.removeObserver(tutorial); //important to remove the observers in order to preserve framerate
       }
     }
   }
-  
 }
