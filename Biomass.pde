@@ -3,6 +3,8 @@ class Biomass extends Alien { //biomass is dropped on alien's death, biomass are
   public Biomass(float _x, float _y) {
     pos = new PVector(_x, _y);
     diameter = biomassSize;
+    collidable = false; 
+    selectable = false;
   }
 
   void render () {

@@ -12,7 +12,8 @@ public class Larva extends Alien {
     diameter = larvaDiameter;
     type = "Larva";
     cor = larvaColor;
-
+    collidable = true;
+    selectable = true;
     growthTimer = 200;
   }
 

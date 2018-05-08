@@ -1,11 +1,17 @@
 public class Alien implements Subject {
-
+  AudioOutput out;
+  Oscil       wave;
+  FFT fftLinA;
   private ArrayList <Observer> observers = new ArrayList <Observer>();
   private String event; 
+  boolean collidable;
+  boolean selectable;
 
   float [] genome; //all stats of an alien, in order to implement genetics
   DeepQNetwork RLNet; //neural net
 
+  int fitness;
+  
   //stats variables, perhaps to be replaces by genome
   float speed; //speed of an agent
   float velocity;  //velocity at which the agent is moving
@@ -24,18 +30,30 @@ public class Alien implements Subject {
   ArrayList <float []> lastOutputs; // an array to store a number of last world states that are to be rated
   float ratedActionsNum = 50; //number of the last actions that are going to be rated by the player, there needs to be many actions (10) for the neural network precision
   final int InputLength = 513; //the size of the input that the agent receives. the sound spectrum is the total of 513 numbers
-  final int NumActions = 5; //total number of actions that the agent can perform: move right, left,up, etc.
-  final String [] actions = new String [] {"up", "down", "left", "right", "nothing"};
+  int NumActions; //total number of actions that the agent can perform: move right, left,up, etc.
+  String [] actions;
   //initialization model for a neural network to be used by DeepQNetwork
-  final int [] _layers = new int[] {InputLength, 50, 25, 10, NumActions};
+  int [] _layers;
 
   String []controls; //options which will appear as buttons on the top left when the agent is selected, view the child classes for reference
 
+  boolean triggerNoise = false;
+  boolean soundPlaying = false;
+  int soundCounter; 
+  int soundTimer = 1;
+  
+  int soundInterval;
+  int intervalCounter;
+  
   //function to produce sound, currently it just draws an indicator whnever alien is to produce a sound
   void produceSound() {
-    noFill(); 
-    stroke ( 0);
-    ellipse (pos.x, pos.y, diameter + 5, diameter + 5);
+   
+    wave.unpatch( out );
+   // patch the Oscil to the output
+    wave.patch( out );
+  }
+  void stopSound() {
+    wave.unpatch(out);
   }
 
 
@@ -43,7 +61,36 @@ public class Alien implements Subject {
   void executeFunction(int functionId) {
   }
 
-  void listenToSound() {
+
+//analyse the sounds produced by other aliens
+  float [] readSound ( Alien a ){
+    float [] directionalMatrix = new float [4]; 
+    for ( int i = 0; i< directionalMatrix.length; i++){
+      directionalMatrix[i] = 0;
+    }
+    if ( a.pos.x > pos.x){
+      directionalMatrix[0] = 1;
+    }
+     if ( a.pos.x < pos.x){
+      directionalMatrix[1] = 1;
+    }
+     if ( a.pos.y < pos.y){
+      directionalMatrix[2] = 1;
+    }
+     if ( a.pos.y > pos.y){
+      directionalMatrix[3] = 1;
+    }
+    
+    float [] worldState = new float [directionalMatrix.length + 1];
+    for ( int i = 0; i< worldState.length-1; i++){
+      worldState[i] = directionalMatrix[i];
+      
+    }
+    
+    worldState[worldState.length - 1] = wave.frequency.getLastValue();
+   
+    
+    return worldState;
   }
 
   //each alien can evolve into another type going through pupal phase
@@ -58,12 +105,28 @@ public class Alien implements Subject {
     fill (cor); 
     noStroke();
     ellipse (pos.x, pos.y, diameter, diameter);
+     if (soundPlaying){
+        noFill(); 
+        stroke ( 0);
+        ellipse (pos.x, pos.y, diameter + 5, diameter + 5);
+     }
   }
 
   void update() {
     checkWallCollision();
     collisionMove();
     checkObstacleCollision();
+    if (triggerNoise){
+      produceSound(); 
+      triggerNoise = false;
+      soundPlaying = true;
+      soundCounter = 0; 
+    }
+    soundCounter++;
+    if ( soundCounter > soundTimer && soundPlaying) {
+      stopSound();
+      soundPlaying = false;
+    }
   }
 
   void performAction(int t) {
@@ -82,6 +145,9 @@ public class Alien implements Subject {
       break; 
     case "nothing": 
       //do nothing
+      break;
+     case "produceSound": 
+      triggerNoise = true;
       break;
     }
   }
@@ -149,9 +215,10 @@ public class Alien implements Subject {
     }
     return spectrum;
   }
+  
 
-  float [] getSoundSpectrum(AudioOutput in) {
-    fftLin.forward(in.mix);
+  float [] getSoundSpectrum(AudioOutput out) {
+    fftLin.forward(out.mix);
     float [] spectrum = new float [fftLin.specSize()];
     for ( int i = 0; i< fftLin.specSize(); i++) {
       spectrum[i] = fftLin.getBand(i);
@@ -163,7 +230,7 @@ public class Alien implements Subject {
   //returns the alien which is colliding with the current alien
   Alien checkCollision() {
     for (Alien a : aliens) {
-      if ( a != this) {
+      if ( a != this && a.collidable) {
         if (dist(pos.x, pos.y, a.pos.x, a.pos.y) < diameter/2 + a.diameter/2) {
           return a;
         }
@@ -275,6 +342,8 @@ public class Alien implements Subject {
       }
     }
   }
+  
+
 
   @Override 
     public void registerObserver(Observer observer) {

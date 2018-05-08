@@ -12,7 +12,7 @@ class GameLevel {
     //obstacles.add(new Obstacle ( width/2 + 80, 100,width/2+100,520));
     //obstacles.add(new Obstacle ( width/2 - 100, 500,width/2+100,520));
 
-    obstacles.add(new Obstacle ( width/2 - 40, 300, width/2, 250));
+   // obstacles.add(new Obstacle ( width/2 - 40, 300, width/2, 250));
   }
 
   void update() {

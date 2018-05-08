@@ -3,7 +3,7 @@ public class Fighter extends Alien {
 
   final color fighterColor = color(0, 0, 0);
   final float fighter_size = 10; //visual size of the agent
-  final float fighter_speed = 1; // locomotion speed of the agent
+  final float fighter_speed = 3; // locomotion speed of the agent
 
   int nn_update_frequency = 20;
 
@@ -14,19 +14,35 @@ public class Fighter extends Alien {
   int updateFreq = 1;
   int replayStartSize = 12;
 
+  
 
 
   public Fighter(float _x, float _y) {
     lastOutputs = new ArrayList<float []>();
-    RLNet = new DeepQNetwork(_layers, replayMemoryCapacity, discount, epsilon, batchSize, updateFreq, replayStartSize, InputLength, NumActions);
+   
+    actions = new String [] {"up", "down", "left", "right", "nothing"};
+    NumActions = actions.length;
+     _layers = new int[] {InputLength, 50, 25, 10, NumActions};
     diameter = fighter_size;
     pos = new PVector (_x, _y);
     speed = fighter_speed;
     cor = fighterColor;
     type = "Fighter";
+        RLNet = new DeepQNetwork(_layers, replayMemoryCapacity, discount, epsilon, batchSize, updateFreq, replayStartSize, InputLength, NumActions);
+
+      out = minim.getLineOut();
+    // create a sine wave Oscil, set to 440 Hz, at 0.5 amplitude
+    wave = new Oscil( 100, 0.5f, Waves.SINE );
+    fftLinA = new FFT (out.bufferSize(), out.sampleRate());
+    fftLinA.linAverages(30);
+    
     this.registerObserver(tutorial);
 
     controls = new String[] {};
+    collidable = true;
+    selectable = true;
+    
+    soundInterval = 5;
   }
 
   void update() {
@@ -37,6 +53,11 @@ public class Fighter extends Alien {
     }
     else{
       fighterListen();
+    }
+    intervalCounter ++; 
+    if ( intervalCounter > soundInterval){
+     triggerNoise = true;
+     intervalCounter = 0; 
     }
   }
 
@@ -73,9 +94,9 @@ public class Fighter extends Alien {
   void render() {
     super.render();
     ellipse(pos.x, pos.y, diameter, diameter);
-    stroke(0); 
-    for ( float i = 0; i<= TWO_PI; i = i + QUARTER_PI/2) {
-      line(pos.x, pos.y, pos.x + diameter*0.7*cos(i), pos.y + diameter*0.7*sin(i));
-    }
+    //stroke(0); 
+    //for ( float i = 0; i<= TWO_PI; i = i + QUARTER_PI/2) {
+    //  line(pos.x, pos.y, pos.x + diameter*0.7*cos(i), pos.y + diameter*0.7*sin(i));
+    //}
   }
 }

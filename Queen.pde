@@ -15,6 +15,8 @@ public class Queen extends Alien {
     type = "Queen";
     controls = new String[] {"Spawn Larvae"};
     this.registerObserver(tutorial);
+    collidable = true;
+    selectable = true;
   }
 
   void executeFunction(int functionId) {
@@ -26,4 +28,6 @@ public class Queen extends Alien {
       break;
     }
   }
+  
+  
 }

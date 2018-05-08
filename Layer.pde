@@ -29,12 +29,34 @@ public class Layer {
 
     InitializeWeights();
   }
+  
+  public Layer ( int numberOfInputs, int numberOfOutputs, float [][] w){
+    this.numberOfInputs = numberOfInputs; 
+    this.numberOfOutputs = numberOfOutputs;
+    
+    outputs = new float [numberOfOutputs]; 
+    inputs = new float [numberOfInputs]; 
+    weights = new float [numberOfOutputs][numberOfInputs]; 
+    weightsDelta = new float [numberOfOutputs][numberOfInputs];
+    gamma = new float [numberOfOutputs]; 
+    error = new float [numberOfOutputs];
+    
+    CopyWeights(w);
+  }
 
   //  Initilize weights between -0.5 and 0.5
   public void InitializeWeights() {
     for ( int i = 0; i< numberOfOutputs; i++) {
       for (int j = 0; j < numberOfInputs; j++) {
         weights[i][j] = random(1) - 0.5;
+      }
+    }
+  }
+  
+    public void CopyWeights(float [][] w){
+    for ( int i = 0; i< numberOfOutputs; i++){
+      for (int j = 0; j < numberOfInputs; j++){
+        weights[i][j] = w[i][j];
       }
     }
   }
@@ -109,4 +131,67 @@ public class Layer {
       }
     }
   }
+  
+  public void Mutate(){
+   int randomiser = int ( random(0,10));
+   if ( randomiser == 1){
+     for ( int i = 0; i< numberOfOutputs; i++){
+        for (int j = 0; j < numberOfInputs; j++){
+          float chance = random(1);
+         if (chance > 0.9) weights[i][j] = weights[i][j] + random(1);
+        }
+      }
+   }
+   if ( randomiser == 2){
+     for ( int i = 0; i< numberOfOutputs; i++){
+        for (int j = 0; j < numberOfInputs; j++){
+            float chance = random(1);
+         if (chance > 0.9) weights[i][j] = weights[i][j] * -1;
+        }
+      }
+   }
+   
+    if ( randomiser == 3){
+     for ( int i = 0; i< numberOfOutputs; i++){
+        for (int j = 0; j < numberOfInputs; j++){
+            float chance = random(1);
+         if (chance > 0.9) weights[i][j] = weights[i][j] - random(1);
+        }
+      }
+   }
+   if ( randomiser == 4){
+     for ( int i = 0; i< numberOfOutputs; i++){
+        for (int j = 0; j < numberOfInputs; j++){
+            float chance = random(1);
+         if (chance > 0.9) weights[i][j] = weights[i][j] /2;
+        }
+      }
+   }
+   if ( randomiser == 5){
+     for ( int i = 0; i< numberOfOutputs; i++){
+        for (int j = 0; j < numberOfInputs; j++){
+            float chance = random(1);
+         if (chance > 0.9) weights[i][j] = weights[i][j] - 0.1;
+        }
+      }
+   }
+   
+   if ( randomiser == 6){
+     for ( int i = 0; i< numberOfOutputs; i++){
+        for (int j = 0; j < numberOfInputs; j++){
+            float chance = random(1);
+         if (chance > 0.9) weights[i][j] = weights[i][j] + 0.1;
+        }
+      }
+   }
+   if ( randomiser == 7){
+     for ( int i = 0; i< numberOfOutputs; i++){
+        for (int j = 0; j < numberOfInputs; j++){
+            float chance = random(1);
+         if (chance > 0.9) weights[i][j] = 0;
+        }
+      }
+   }
+}
+
 }

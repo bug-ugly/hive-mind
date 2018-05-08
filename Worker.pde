@@ -1,4 +1,6 @@
 public class Worker extends Alien {
+  NeuralNetwork net; 
+  
   final float worker_size = 7; 
   final float worker_speed = 0.8; 
   final color workerColor = color(0, 0, 0);
@@ -8,27 +10,96 @@ public class Worker extends Alien {
   final float fighterRange = 50; //keep this distance from a fighter
 
   //initialization model for a neural network to be used by DeepQNetwork
-  final int [] _layers = new int[] {InputLength, 50, 25, 10, NumActions};
-  final String [] actions = new String [] {"up", "down", "left", "right", "nothing"};
-
+  float []directionsPI;
+  float [] directionalValues;
+  
 
   public Worker(float _x, float _y) {
+   
+    
+    directionsPI = new float [] {0,QUARTER_PI, PI/2, PI/2 + QUARTER_PI, PI, PI + QUARTER_PI, PI + PI/2, PI*2 - QUARTER_PI, PI};
+    directionalValues = new float [directionsPI.length];
+    for ( int i = 0; i < directionalValues.length; i++){
+      directionalValues [i] = 0;
+    }
+   
+    _layers = new int[] {5, 30, 16, directionalValues.length};
+    net = new NeuralNetwork ( _layers);
     type = "Worker";
     diameter = worker_size;
     pos = new PVector (_x, _y);
     speed = worker_speed;
     cor = workerColor;
-    controls = new String[] {"Evolve Fighter", "Evolve Drone"};
+    hearing_distance = 100;
+    controls = new String[] {"Evolve Fighter"};
+    out = minim.getLineOut();
+    // create a sine wave Oscil, set to 440 Hz, at 0.5 amplitude
+    wave = new Oscil( 200, 0.5f, Waves.SINE );
+    fftLinA = new FFT (out.bufferSize(), out.sampleRate());
+    fftLinA.linAverages(30);
     this.registerObserver(tutorial);
+    collidable = true;
+    selectable = true;
+    soundInterval = 10;
+    fitness = 0;
   }
 
   void update() {
-    //stayAway();
-    stayClose();
+     //stayClose();
      super.update();
-     avoidFighter();
+     //avoidFighter();
+     
+     
+     directionalValues = new float [directionsPI.length];
+     for ( int i = 0; i< aliens.size(); i++){
+       Alien a = aliens.get(i);
+       if ( a != this && a.soundPlaying && dist(a.pos.x, a.pos.y, pos.x, pos.y) < hearing_distance){
+         for ( int j = 0; j<directionalValues.length; j++){
+             directionalValues[j] =  directionalValues[j] + net.FeedForward (readSound(a))[j];
+         }
+       }
+     }
+     act(directionalValues);
+     
+     intervalCounter ++; 
+    if ( intervalCounter > soundInterval){
+     triggerNoise = true;
+     intervalCounter = 0; 
+    }
+    
+    
+  }
+  
+  void avaluateFitness(){
+    for(Alien a: aliens){
+      if ( a instanceof Worker && a != this){
+        if ( dist(a.pos.x, a.pos.y, pos.x, pos.y) < workerRange ){
+          fitness ++;
+        }
+      }
+    }
+
   }
 
+  void act ( float []values ) {
+   float maxVal = 0;
+   int top = values.length-1;
+   for ( int i = 0; i < values.length; i++){
+     if ( values[i] > maxVal){
+       maxVal = values[i]; 
+       top = i;
+     }
+   }
+   if ( top != values.length-1){
+    
+          direction = directionsPI[top];
+          float newX = cos(direction) * speed + pos.x;
+          float newY = sin(direction) * speed + pos.y;
+          pos.set(newX, newY, 0.);
+    }
+   }
+  
+  
   void executeFunction(int functionId) {
     super.executeFunction(functionId);
     switch(controls[functionId]) {
@@ -41,6 +112,7 @@ public class Worker extends Alien {
       break;
     }
   }
+
   
   void stayAway(){
     float closestX = 0; 
@@ -61,7 +133,7 @@ public class Worker extends Alien {
         }
       }
     }
-    if ( active){
+    if (active){
            float invertion = PI;
           //calculate an angle of a vector pointing towads the target
           float angle = atan2(closestY - pos.y, closestX - pos.x);

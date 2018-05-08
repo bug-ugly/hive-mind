@@ -8,5 +8,7 @@ public class Drone extends Alien {
     pos = new PVector(_x, _y);
     diameter = droneSize;
     cor = droneColor;
+    collidable = true;
+    selectable = true;
   }
 }

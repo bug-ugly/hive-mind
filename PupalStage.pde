@@ -20,6 +20,8 @@ public class PupalStage extends Alien {
     diameter = pupaSize;
     registerObserver(tutorial);
     setEvent("EVENT_PUPAL_STAGE");
+    collidable = true;
+    selectable = true;
   }
 
   public void update() {
