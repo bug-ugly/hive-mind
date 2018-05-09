@@ -1,6 +1,5 @@
 public class Worker extends Alien {
- 
-  
+
   final float worker_size = 7; 
   final float worker_speed = 0.8; 
   final color workerColor = color(0, 0, 0);
@@ -127,8 +126,8 @@ public class Worker extends Alien {
        top = i;
      }
    }
+   
    if ( top != values.length-1){
-    
           direction = directionsPI[top];
           float newX = cos(direction) * speed + pos.x;
           float newY = sin(direction) * speed + pos.y;
