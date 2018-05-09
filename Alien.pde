@@ -6,10 +6,9 @@ public class Alien implements Subject {
   private String event; 
   boolean collidable;
   boolean selectable;
-
-  float [] genome; //all stats of an alien, in order to implement genetics
+  
   DeepQNetwork RLNet; //neural net
-
+  NeuralNetwork net; 
   int fitness;
   
   //stats variables, perhaps to be replaces by genome
@@ -63,39 +62,75 @@ public class Alien implements Subject {
 
 
 //analyse the sounds produced by other aliens
-  float [] readSound ( Alien a ){
-    float [] directionalMatrix = new float [4]; 
+  float [] readSound (){
+    float [] directionalMatrix = new float [16]; 
     for ( int i = 0; i< directionalMatrix.length; i++){
       directionalMatrix[i] = 0;
     }
-    if ( a.pos.x > pos.x){
-      directionalMatrix[0] = 1;
+    for (int i = 0; i < aliens.size(); i++){
+      Alien a  = aliens.get(i);
+      if ( a != this && a.soundPlaying &&dist( a.pos.x, a.pos.y, pos.x, pos.y) < hearing_distance ){
+        float d = atan2(a.pos.x - pos.y, a.pos.y - pos.x);
+        if ( a instanceof Worker){
+          if ( d > 0 && d< PI/4 ){
+            directionalMatrix[0] = a.wave.frequency.getLastValue();
+          }
+          if ( d > PI/4 && d< PI/2 ){
+             directionalMatrix[1] = a.wave.frequency.getLastValue();
+          }
+          if ( d > PI/2 && d< PI/2 + PI/4 ){
+             directionalMatrix[2] = a.wave.frequency.getLastValue();
+          }
+          if ( d > PI/2 + PI/4 && d< PI ){
+             directionalMatrix[3] = a.wave.frequency.getLastValue();
+          }
+          if ( d > PI && d< PI + PI/4 ){
+             directionalMatrix[4] = a.wave.frequency.getLastValue();
+          }
+          if ( d > PI + PI/4 && d< PI + PI/2 ){
+             directionalMatrix[5] = a.wave.frequency.getLastValue();
+          }
+          if ( d > PI/2 + PI && d< PI * 2 - PI/4 ){
+             directionalMatrix[6] = a.wave.frequency.getLastValue();
+          }
+          if ( d > PI * 2 - PI/4 && d< PI*2 ){
+             directionalMatrix[7] = a.wave.frequency.getLastValue();
+          }
+          }
+        if ( a instanceof Fighter){
+          if ( d > 0 && d< PI/4 ){
+            directionalMatrix[8] = a.wave.frequency.getLastValue();
+          }
+          if ( d > PI/4 && d< PI/2 ){
+             directionalMatrix[9] = a.wave.frequency.getLastValue();
+          }
+          if ( d > PI/2 && d< PI/2 + PI/4 ){
+             directionalMatrix[10] = a.wave.frequency.getLastValue();
+          }
+          if ( d > PI/2 + PI/4 && d< PI ){
+             directionalMatrix[11] = a.wave.frequency.getLastValue();
+          }
+          if ( d > PI && d< PI + PI/4 ){
+             directionalMatrix[12] = a.wave.frequency.getLastValue();
+          }
+          if ( d > PI + PI/4 && d< PI + PI/2 ){
+             directionalMatrix[13] = a.wave.frequency.getLastValue();
+          }
+          if ( d > PI/2 + PI && d< PI * 2 - PI/4 ){
+             directionalMatrix[14] = a.wave.frequency.getLastValue();
+          }
+          if ( d > PI * 2 - PI/4 && d< PI*2 ){
+             directionalMatrix[15] = a.wave.frequency.getLastValue();
+          }
+          }
+      }
     }
-     if ( a.pos.x < pos.x){
-      directionalMatrix[1] = 1;
-    }
-     if ( a.pos.y < pos.y){
-      directionalMatrix[2] = 1;
-    }
-     if ( a.pos.y > pos.y){
-      directionalMatrix[3] = 1;
-    }
-    
-    float [] worldState = new float [directionalMatrix.length + 1];
-    for ( int i = 0; i< worldState.length-1; i++){
-      worldState[i] = directionalMatrix[i];
-      
-    }
-    
-    worldState[worldState.length - 1] = wave.frequency.getLastValue();
-   
-    
-    return worldState;
+    return directionalMatrix;
   }
 
   //each alien can evolve into another type going through pupal phase
   void evolve ( String nextState, String currentState) {
-    aliens.add( new PupalStage(currentState, nextState, genome, pos.x, pos.y));
+    aliens.add( new PupalStage(currentState, nextState, pos.x, pos.y));
     aliens.remove(this);
     this.removeObserver(tutorial);
   }

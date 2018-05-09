@@ -35,24 +35,6 @@ class NeuralNetwork {
     }
   }
   
-   NeuralNetwork ( int[]layer, NeuralNetwork n, NeuralNetwork m) {
-    //deep copy layers
-    this.layer = new int [layer.length]; 
-    for ( int i = 0; i < layer.length; i ++ ){
-      this.layer [i] = layer[i];
-    }
-     //copies neural layers
-    layers = new Layer[layer.length-1];
-    for (int i = 0; i < layers.length; i++){
-      float rand = ( random (1)); 
-      if ( rand > 0.5){
-      layers [i] = new Layer (layer[i], layer[i+1], n.layers[i].weights);
-      }
-      else{
-      layers [i] = new Layer (layer[i], layer[i+1], m.layers[i].weights);
-      }
-    }
-  }
 
   /// High level feedforward for this network
   public float[] FeedForward(float[] _inputs) {

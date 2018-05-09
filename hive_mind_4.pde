@@ -94,3 +94,11 @@ float [] getaRow (float[][] array, int i) {
   }
   return myRow;
 }
+
+
+void keyPressed(){ 
+  if ( keyCode == TAB){
+  aManager.quickEvolveWorkers();
+  }
+  
+}

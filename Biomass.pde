@@ -8,7 +8,7 @@ class Biomass extends Alien { //biomass is dropped on alien's death, biomass are
   }
 
   void render () {
-    fill ( 255, 0, 0); 
+    fill ( 210, 0, 255); 
     ellipse (pos.x, pos.y, diameter, diameter);
   }
 }

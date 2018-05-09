@@ -9,10 +9,10 @@ public class PupalStage extends Alien {
   final int incubationTime = 200; 
 
 
-  public PupalStage(String _previousState, String _nextState, float[] gene, float _x, float _y) {
+  public PupalStage(String _previousState, String _nextState, float _x, float _y) {
     type = "Pupa";
     incubationCounter = incubationTime;
-    genome = gene;
+
     previousState = _previousState; 
     nextState = _nextState;
     pos = new PVector(_x, _y);

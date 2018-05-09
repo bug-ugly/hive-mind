@@ -24,8 +24,8 @@ class AlienManager {
     for (int i = 0; i< aliens.size(); i++) {
       Alien a = aliens.get(i);
       if (a.dead) {
-        aliens.remove(a);
         a.removeObserver(tutorial); //important to remove the observers in order to preserve framerate
+        aliens.remove(a);
       }
     }
   }
@@ -42,13 +42,36 @@ class AlienManager {
       }
       Collections.sort(workers, new Sortbyfitness());
     }
-    
-    for (int i = workers.size()-1; i > workers.size() - int(workers.size()/100 * elitesPercent); i --){
+
+    for (int i = workers.size()-1; i >= workers.size()-1 - int(workers.size()* elitesPercent/100); i --) {
       elites.add(workers.get(i));
     }
     return elites;
   }
+
+  void quickEvolveWorkers() {
+    int j = 0;
+    ArrayList <Alien> elites = new ArrayList <Alien>();
+    elites = returnFit();
+    println(returnFit().size());
+
+    for ( int i = 0; i< aliens.size(); i++) {
+      if ( aliens.get(i) instanceof Worker) {
+        aliens.get(i).dead = true;
+      }
+    }
+
+    for ( int i = 0; i< 20; i++) {
+      aliens.add(new Worker(width/2, height/2, elites.get(j).net));
+      j++;
+      if (j >= elites.size()) {
+        j = 0;
+      }
+    }
+  }
 }
+
+
 
 class Sortbyfitness implements Comparator<Alien>
 {
