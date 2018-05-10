@@ -1,7 +1,6 @@
 public class Alien implements Subject {
   AudioOutput out;
-  Oscil       wave;
-  FFT fftLinA;
+  Oscil wave;
   private ArrayList <Observer> observers = new ArrayList <Observer>();
   private String event; 
   boolean collidable;
@@ -60,68 +59,22 @@ public class Alien implements Subject {
   void executeFunction(int functionId) {
   }
 
+  void compareFitnessAndAdd(NeuralNetwork _n, int f){};
 
 //analyse the sounds produced by other aliens
   float [] readSound (){
-    float [] directionalMatrix = new float [16]; 
+    float [] directionalMatrix = new float [8]; 
     for ( int i = 0; i< directionalMatrix.length; i++){
-      directionalMatrix[i] = 0;
+      directionalMatrix[i] = 1;
     }
     for (int i = 0; i < aliens.size(); i++){
       Alien a  = aliens.get(i);
       if ( a != this && a.soundPlaying &&dist( a.pos.x, a.pos.y, pos.x, pos.y) < hearing_distance ){
         float d = atan2(a.pos.x - pos.y, a.pos.y - pos.x);
-        if ( a instanceof Worker){
-          if ( d > 0 && d< PI/4 ){
-            directionalMatrix[0] = a.wave.frequency.getLastValue();
-          }
-          if ( d > PI/4 && d< PI/2 ){
-             directionalMatrix[1] = a.wave.frequency.getLastValue();
-          }
-          if ( d > PI/2 && d< PI/2 + PI/4 ){
-             directionalMatrix[2] = a.wave.frequency.getLastValue();
-          }
-          if ( d > PI/2 + PI/4 && d< PI ){
-             directionalMatrix[3] = a.wave.frequency.getLastValue();
-          }
-          if ( d > PI && d< PI + PI/4 ){
-             directionalMatrix[4] = a.wave.frequency.getLastValue();
-          }
-          if ( d > PI + PI/4 && d< PI + PI/2 ){
-             directionalMatrix[5] = a.wave.frequency.getLastValue();
-          }
-          if ( d > PI/2 + PI && d< PI * 2 - PI/4 ){
-             directionalMatrix[6] = a.wave.frequency.getLastValue();
-          }
-          if ( d > PI * 2 - PI/4 && d< PI*2 ){
-             directionalMatrix[7] = a.wave.frequency.getLastValue();
-          }
-          }
-        if ( a instanceof Fighter){
-          if ( d > 0 && d< PI/4 ){
-            directionalMatrix[8] = a.wave.frequency.getLastValue();
-          }
-          if ( d > PI/4 && d< PI/2 ){
-             directionalMatrix[9] = a.wave.frequency.getLastValue();
-          }
-          if ( d > PI/2 && d< PI/2 + PI/4 ){
-             directionalMatrix[10] = a.wave.frequency.getLastValue();
-          }
-          if ( d > PI/2 + PI/4 && d< PI ){
-             directionalMatrix[11] = a.wave.frequency.getLastValue();
-          }
-          if ( d > PI && d< PI + PI/4 ){
-             directionalMatrix[12] = a.wave.frequency.getLastValue();
-          }
-          if ( d > PI + PI/4 && d< PI + PI/2 ){
-             directionalMatrix[13] = a.wave.frequency.getLastValue();
-          }
-          if ( d > PI/2 + PI && d< PI * 2 - PI/4 ){
-             directionalMatrix[14] = a.wave.frequency.getLastValue();
-          }
-          if ( d > PI * 2 - PI/4 && d< PI*2 ){
-             directionalMatrix[15] = a.wave.frequency.getLastValue();
-          }
+            for (int j = 0; j<directionalMatrix.length; j++){
+              if ( d > TWO_PI / directionalMatrix.length * j && d < TWO_PI/directionalMatrix.length * j + TWO_PI/directionalMatrix.length){
+                directionalMatrix[j] = a.wave.frequency.getLastValue();
+            }
           }
       }
     }
@@ -205,7 +158,7 @@ public class Alien implements Subject {
 
 
   void produceLarva() {
-    aliens.add(new Larva(pos.x, pos.y));
+   
   }
 
   //makes sure that the alien doesnt leave the screen borders
@@ -378,6 +331,16 @@ public class Alien implements Subject {
     }
   }
   
+  void die(){
+    //death which happens as an ingame event rather than simple object removal
+    if ( this instanceof Fighter || this instanceof Worker || this instanceof Drone){
+      for ( int i = 0; i < 5; i++){
+      aliens.add(new Biomass(pos.x + random(-3,3), pos.y + random(-3,3)));
+      }
+    }
+    dead = true; 
+
+  }
 
 
   @Override 

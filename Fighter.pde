@@ -33,8 +33,6 @@ public class Fighter extends Alien {
       out = minim.getLineOut();
     // create a sine wave Oscil, set to 440 Hz, at 0.5 amplitude
     wave = new Oscil( 100, 0.5f, Waves.SINE );
-    fftLinA = new FFT (out.bufferSize(), out.sampleRate());
-    fftLinA.linAverages(30);
     
     this.registerObserver(tutorial);
 

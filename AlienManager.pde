@@ -21,10 +21,10 @@ class AlienManager {
 
   //remove the dead aliens
   void clearDead() {
-    for (int i = 0; i< aliens.size(); i++) {
+    for (int i = aliens.size()-1; i>= 0; i--) {
       Alien a = aliens.get(i);
       if (a.dead) {
-        aliens.remove(a);
+        aliens.remove(i);
         a.removeObserver(tutorial); //important to remove the observers in order to preserve framerate
         a = null;
       }
@@ -42,11 +42,13 @@ class AlienManager {
         workers.add(m);
       }
     }
+      
     
     Collections.sort(workers, new Sortbyfitness());
     for (int i = workers.size()-1; i >= workers.size()-1 - int(workers.size()* elitesPercent/100); i --) {
       elites.add(workers.get(i));
     }
+   
     workers = null;
     return elites;
   }
@@ -59,14 +61,17 @@ class AlienManager {
         aliens.get(i).dead = true;
       }
     }
-
+     ArrayList <Alien> elites = new ArrayList <Alien>();
+     elites = returnFit();
     for ( int i = 0; i< 20; i++) {
-      aliens.add(new Worker(width/2, height/2, returnFit().get(j).net));
+      aliens.add(new Worker(width/2, height/2, elites.get(j).net));
+       //slowing down here... wut
       j++;
-      if (j >= returnFit().size()) {
+      if (j >= elites.size()) {
         j = 0;
       }
     }
+  
   }
   
 }

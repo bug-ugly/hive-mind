@@ -13,46 +13,15 @@ public class Worker extends Alien {
   float [] directionalValues;
   float mutation_chance = 0.5;
 
-  public Worker(float _x, float _y) {
-   
-    
-    directionsPI = new float [] {0,QUARTER_PI, PI/2, PI/2 + QUARTER_PI, PI, PI + QUARTER_PI, PI + PI/2, PI*2 - QUARTER_PI, PI};
-    directionalValues = new float [directionsPI.length];
-    for ( int i = 0; i < directionalValues.length; i++){
-      directionalValues [i] = 0;
-    }
-   
-    _layers = new int[] {16, 30, 16, directionalValues.length};
-    net = new NeuralNetwork ( _layers);
-    type = "Worker";
-    diameter = worker_size;
-    pos = new PVector (_x, _y);
-    speed = worker_speed;
-    cor = workerColor;
-    hearing_distance = 100;
-    controls = new String[] {"Evolve Fighter"};
-    out = minim.getLineOut();
-    // create a sine wave Oscil, set to 440 Hz, at 0.5 amplitude
-    wave = new Oscil( 200, 0.5f, Waves.SINE );
-    fftLinA = new FFT (out.bufferSize(), out.sampleRate());
-    fftLinA.linAverages(30);
-    this.registerObserver(tutorial);
-    collidable = true;
-    selectable = true;
-    soundInterval = 10;
-    fitness = 0;
-  }
   
   public Worker(float _x, float _y, NeuralNetwork _net) {
-   
-    
     directionsPI = new float [] {0,QUARTER_PI, PI/2, PI/2 + QUARTER_PI, PI, PI + QUARTER_PI, PI + PI/2, PI*2 - QUARTER_PI, PI};
     directionalValues = new float [directionsPI.length];
     for ( int i = 0; i < directionalValues.length; i++){
       directionalValues [i] = 0;
     }
    
-    _layers = new int[] {16, 30, 16, directionalValues.length};
+    _layers = new int[] {8, 30, 16, directionalValues.length};
     net = new NeuralNetwork ( _layers, _net);
     type = "Worker";
     diameter = worker_size;
@@ -60,12 +29,10 @@ public class Worker extends Alien {
     speed = worker_speed;
     cor = workerColor;
     hearing_distance = 100;
-    controls = new String[] {"Evolve Fighter"};
+    controls = new String[] {"Evolve Fighter", "Evolve Drone"};  
     out = minim.getLineOut();
     // create a sine wave Oscil, set to 440 Hz, at 0.5 amplitude
     wave = new Oscil( 200, 0.5f, Waves.SINE );
-    fftLinA = new FFT (out.bufferSize(), out.sampleRate());
-    fftLinA.linAverages(30);
     this.registerObserver(tutorial);
     collidable = true;
     selectable = true;
@@ -75,7 +42,6 @@ public class Worker extends Alien {
      float ran = random(1);
         if ( ran > mutation_chance){
           net.Mutate();
-    
         }
      
   }
@@ -209,6 +175,16 @@ public class Worker extends Alien {
           float newY = sin(direction) * speed + pos.y;
           pos.set(newX, newY, 0.);
     }
+  }
+  
+  void die(){
+    for (int i = 0; i < aliens.size(); i++){
+      Alien a = aliens.get(i); 
+      if ( a instanceof Queen){
+        a.compareFitnessAndAdd(net, fitness);
+      }
+    }
+    super.die();
   }
 
   void avoidFighter() {

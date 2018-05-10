@@ -2,7 +2,7 @@
 class NeuralNetwork {
   int[]layer; 
   Layer[]layers;
-
+  int fitness; 
 
   /// Constructor setting up layers
   NeuralNetwork(int[]layer) {

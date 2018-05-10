@@ -6,7 +6,9 @@ public class Larva extends Alien {
 
   int growthTimer;
 
-  public Larva (float _x, float _y ) {
+  public Larva (float _x, float _y, NeuralNetwork _net) {
+    _layers = new int[] {8, 30, 16, 9};
+    net = new NeuralNetwork ( _layers, _net);
     pos = new PVector(_x, _y);
     speed = larvaSpeed;
     diameter = larvaDiameter;
@@ -15,6 +17,7 @@ public class Larva extends Alien {
     collidable = true;
     selectable = true;
     growthTimer = 200;
+   
   }
 
   public void render() {
@@ -33,7 +36,7 @@ public class Larva extends Alien {
   }
 
   public void grow() {
-    aliens.add(new Worker(pos.x, pos.y));
+    aliens.add(new Worker(pos.x, pos.y, net));
     dead = true;
   }
 }

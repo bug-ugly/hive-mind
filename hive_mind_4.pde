@@ -6,6 +6,10 @@ import ddf.minim.spi.*;
 import ddf.minim.ugens.*;
 import ddf.minim.analysis.FFT;
 import controlP5.*;
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
 
 ArrayList <Alien> aliens; 
 ArrayList <Obstacle> obstacles;
@@ -13,8 +17,7 @@ ArrayList <Obstacle> obstacles;
 Selection selector;
 AlienManager aManager;
 ControlP5 cp5;
-ControlP5 queenControls;
-ControlP5 workerControls;
+
 Minim minim;
 AudioInput in; //sound from mic
 FFT fftLin;
@@ -25,13 +28,14 @@ Swiper swipeController;
 GameLevel level;
 Tutorial tutorial;
 
-import java.util.*;
-import java.lang.*;
-import java.io.*;
 
 // breeding , feeding , herding, focus on basic behaviours 
 //focus on basic behaviours before making it more complex 
 //important to make various levels and implement a good tutorial so the application would be more "complete"
+
+
+//Make it so workers can die 
+//breeding scenario where Drone kills everyone
 
 //prevents rewards before the action is done
 boolean rewardsActive = false;
@@ -96,9 +100,14 @@ float [] getaRow (float[][] array, int i) {
 }
 
 
-void keyPressed(){ 
-  if ( keyCode == TAB){
-  aManager.quickEvolveWorkers();
+  
+void keyPressed(){
+  if (keyCode == TAB){
+    for (int i = 0; i< aliens.size(); i++){
+      if ( aliens.get(i) instanceof Worker){
+        aliens.get(i).die();
+      }
+    }
   }
   
 }
