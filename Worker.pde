@@ -1,7 +1,7 @@
 public class Worker extends Alien {
 
   final float worker_size = 7; 
-  final float worker_speed = 0.8; 
+  final float worker_speed = 3; 
   final color workerColor = color(0, 0, 0);
 
   final float workerRange = 100; //will try to stay close to the other workers within that range
@@ -10,25 +10,37 @@ public class Worker extends Alien {
 
   //initialization model for a neural network to be used by DeepQNetwork
   float []directionsPI;
-  float [] directionalValues;
   float mutation_chance = 0.5;
 
+  int replayMemoryCapacity = 1024;
+  float discount = .99f;
+  double epsilon = 1d;
+  int batchSize = 8;
+  int updateFreq = 20;
+  int replayStartSize = 8;
+  
+  int scoreFitness;  //temporary storage for real-time fitness evaluation
   
   public Worker(float _x, float _y, NeuralNetwork _net) {
-    directionsPI = new float [] {0,QUARTER_PI, PI/2, PI/2 + QUARTER_PI, PI, PI + QUARTER_PI, PI + PI/2, PI*2 - QUARTER_PI, PI};
-    directionalValues = new float [directionsPI.length];
-    for ( int i = 0; i < directionalValues.length; i++){
-      directionalValues [i] = 0;
-    }
-   
-    _layers = new int[] {8, 30, 16, directionalValues.length};
-    net = new NeuralNetwork ( _layers, _net);
+    NeuralNetwork net = _net;
+     float ran = random(1);
+        if ( ran > mutation_chance){
+          net.Mutate();
+        }
+        
+    directionsPI = new float [] {0,QUARTER_PI, PI/2, PI/2 + QUARTER_PI, PI, PI + QUARTER_PI, PI + PI/2, PI*2 - QUARTER_PI, 1, 2};
+    NumActions = directionsPI.length;
+    _layers = new int[] {matrixLength,64, 20, 10};
+    println(matrixLength);
+    InputLength =  matrixLength;
+    RLNet = new DeepQNetwork(_layers, net, replayMemoryCapacity, discount, epsilon, batchSize, updateFreq, replayStartSize, InputLength, NumActions);
+    
     type = "Worker";
     diameter = worker_size;
     pos = new PVector (_x, _y);
     speed = worker_speed;
     cor = workerColor;
-    hearing_distance = 100;
+    
     controls = new String[] {"Evolve Fighter", "Evolve Drone"};  
     out = minim.getLineOut();
     // create a sine wave Oscil, set to 440 Hz, at 0.5 amplitude
@@ -39,10 +51,7 @@ public class Worker extends Alien {
     soundInterval = 10;
     fitness = 0;
     
-     float ran = random(1);
-        if ( ran > mutation_chance){
-          net.Mutate();
-        }
+    
      
   }
 
@@ -50,9 +59,9 @@ public class Worker extends Alien {
      //stayClose();
      super.update();
      //avoidFighter();
+    
+     act(RLNet.GetAction(readSound(), GetActionMask(NumActions)));
  
-     act(net.FeedForward(readSound()));
-     
      intervalCounter ++; 
     if ( intervalCounter > soundInterval){
      triggerNoise = true;
@@ -60,6 +69,9 @@ public class Worker extends Alien {
     }
     
     evaluateFitness();
+    println(scoreFitness);
+    RLNet.ObserveReward(scoreFitness, readSound(), GetActionMask(NumActions)); 
+    scoreFitness = 0;
     
     
   }
@@ -67,37 +79,39 @@ public class Worker extends Alien {
   void evaluateFitness(){
     for(Alien a: aliens){
       if ( a instanceof Worker && a != this){
-        if ( dist(a.pos.x, a.pos.y, pos.x, pos.y) < workerMinRange ){
-          fitness ++;
-        }
-         if ( dist(a.pos.x, a.pos.y, pos.x, pos.y) < 10 ){
-          fitness --;
+        if ( dist(a.pos.x, a.pos.y, pos.x, pos.y) < workerRange ){
+          fitness = fitness + int(map(dist(a.pos.x,a.pos.y,pos.x,pos.y), workerRange, workerMinRange, 1, 100));
+          scoreFitness = scoreFitness + int(map(dist(a.pos.x,a.pos.y,pos.x,pos.y), workerRange, workerMinRange, 1, 100));
         }
       }
       if ( a instanceof Fighter && a!= this){
          if ( dist(a.pos.x, a.pos.y, pos.x, pos.y) < fighterRange ){
-          fitness --;
+           fitness = fitness - int(map(dist(a.pos.x,a.pos.y,pos.x,pos.y), fighterRange, 0, 2, 200));
+          
+          scoreFitness = scoreFitness - int(map(dist(a.pos.x,a.pos.y,pos.x,pos.y), fighterRange, 0, 2, 200));
         }
       }
     }
 
   }
 
-  void act ( float []values ) {
-   float maxVal = 0;
-   int top = values.length-1;
-   for ( int i = 0; i < values.length; i++){
-     if ( values[i] > maxVal){
-       maxVal = values[i]; 
-       top = i;
-     }
-   }
-   
-   if ( top != values.length-1){
-          direction = directionsPI[top];
+  void act ( int value) {
+
+   if ( value != directionsPI.length-1){
+          direction = directionsPI[value];
           float newX = cos(direction) * speed + pos.x;
           float newY = sin(direction) * speed + pos.y;
           pos.set(newX, newY, 0.);
+          fitness = fitness - 100;
+          scoreFitness = scoreFitness - 100;
+    }
+     if ( value == directionsPI.length-2){
+         if ( sensorState == 1){
+           sensorState = 2;
+         }
+          if ( sensorState == 2){
+           sensorState = 1;
+         }
     }
    }
   
@@ -181,7 +195,7 @@ public class Worker extends Alien {
     for (int i = 0; i < aliens.size(); i++){
       Alien a = aliens.get(i); 
       if ( a instanceof Queen){
-        a.compareFitnessAndAdd(net, fitness);
+        a.compareFitnessAndAdd(RLNet.DeepQ, fitness);
       }
     }
     super.die();

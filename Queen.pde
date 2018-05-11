@@ -22,7 +22,7 @@ public class Queen extends Alien {
     collidable = true;
     selectable = true;
     geneSeed = new ArrayList <NeuralNetwork>();
-      _layers = new int[] {8, 30, 16, 9};
+      _layers = new int[] {matrixLength,64, 20, 10};
       
     for ( int i = 0; i< geneSeedNumber; i++){
     geneSeed.add(new NeuralNetwork ( _layers));

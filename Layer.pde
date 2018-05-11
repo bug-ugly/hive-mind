@@ -84,6 +84,7 @@ public class Layer {
     return outputs;
   }
 
+
   /// TanH derivate 
   public float TanHDer(float value) {
     return 1 - (value * value);

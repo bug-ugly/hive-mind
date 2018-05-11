@@ -7,7 +7,7 @@ public class Larva extends Alien {
   int growthTimer;
 
   public Larva (float _x, float _y, NeuralNetwork _net) {
-    _layers = new int[] {8, 30, 16, 9};
+    _layers = new int[] {matrixLength, 64, 20, 10};
     net = new NeuralNetwork ( _layers, _net);
     pos = new PVector(_x, _y);
     speed = larvaSpeed;

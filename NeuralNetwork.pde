@@ -48,6 +48,26 @@ class NeuralNetwork {
     float[] retVal = layers[layers.length - 1].outputs;
     return retVal; //return out of last layer
   }
+  
+   /// High level feedforward for this network
+  public float[] FeedForward(float[][] _inputs) {
+    float []inp = new float [_inputs.length * _inputs.length];
+    int inpCounter = 0;
+    for ( int i= 0; i< _inputs.length; i++){
+      for ( int j = 0; j < _inputs[i].length; j++){
+        inp [inpCounter] = _inputs[i][j];
+        inpCounter ++ ;
+      }
+    }
+    //feed forward
+    layers[0].FeedForward(inp); //feed forw inputs
+    for ( int i = 1; i< layers.length; i++) { //feed forw neuron outputs
+
+      layers[i].FeedForward(layers[i-1].outputs);
+    }
+    float[] retVal = layers[layers.length - 1].outputs;
+    return retVal; //return out of last layer
+  }
 
 
   //copy the weights from an identical neural net

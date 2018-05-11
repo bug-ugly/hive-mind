@@ -5,8 +5,6 @@ public class Fighter extends Alien {
   final float fighter_size = 10; //visual size of the agent
   final float fighter_speed = 3; // locomotion speed of the agent
 
-  int nn_update_frequency = 20;
-
   int replayMemoryCapacity = 12;
   float discount = .99f;
   double epsilon = 1d;
@@ -28,9 +26,9 @@ public class Fighter extends Alien {
     speed = fighter_speed;
     cor = fighterColor;
     type = "Fighter";
-        RLNet = new DeepQNetwork(_layers, replayMemoryCapacity, discount, epsilon, batchSize, updateFreq, replayStartSize, InputLength, NumActions);
+    RLNet = new DeepQNetwork(_layers, replayMemoryCapacity, discount, epsilon, batchSize, updateFreq, replayStartSize, InputLength, NumActions);
 
-      out = minim.getLineOut();
+    out = minim.getLineOut();
     // create a sine wave Oscil, set to 440 Hz, at 0.5 amplitude
     wave = new Oscil( 100, 0.5f, Waves.SINE );
     
@@ -76,11 +74,35 @@ public class Fighter extends Alien {
       
     }
   }
+  
+  void performAction(int t) {
+    switch (actions[t]) {
+    case "up": 
+      moveUp();
+      break; 
+    case "down": 
+      moveDown();
+      break; 
+    case "left": 
+      moveLeft();
+      break; 
+    case "right": 
+      moveRight();
+      break; 
+    case "nothing": 
+      //do nothing
+      break;
+     case "produceSound": 
+      triggerNoise = true;
+      break;
+    }
+  }
+  
   //function to respond to sounds from player
   void fighterListen() {
     if ((in.left.level() + in.right.level()) /2 >minimum_s_level) {
       rewardsActive = true;
-      int top = RLNet.GetAction(getSoundSpectrum(in), GetActionMask()); //get the action from nn
+      int top = RLNet.GetAction(getSoundSpectrum(in), GetActionMask(NumActions)); //get the action from nn
       lastOutputs.add(getSoundSpectrum(in)); //add the action to the list of last outputs
       while (lastOutputs.size() > ratedActionsNum) { //check if number of last outputs is past the limit and remove the excess actions
         lastOutputs.remove(0);

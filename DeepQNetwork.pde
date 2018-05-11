@@ -37,6 +37,25 @@ public class DeepQNetwork {
     InputLength = inputLength;
     NumActions = numActions;
   }
+  
+    DeepQNetwork(int [] layers, NeuralNetwork _net, int replayMemoryCapacity, float discount, 
+    double epsilon, int batchSize, int updateFreq, int replayStartSize, int inputLength, int numActions) {
+
+    DeepQ = new NeuralNetwork(layers, _net ); //initializing two networks because in deep Q learning there are 2 feed forw steps
+    TargetDeepQ = new NeuralNetwork(layers, _net);
+    TargetDeepQ.setParams(DeepQ); //copy the weights from the original network
+    ReplayMemoryCapacity = replayMemoryCapacity;
+    Epsilon = epsilon;
+    Discount = discount;
+
+    BatchSize = batchSize;
+    UpdateFreq = updateFreq;
+    UpdateCounter = 0;
+    ReplayMemory = new ArrayList<Replay>();
+    ReplayStartSize = replayStartSize;
+    InputLength = inputLength;
+    NumActions = numActions;
+  }
 
   void SetEpsilon(double e) {
     Epsilon = e;
@@ -87,7 +106,7 @@ public class DeepQNetwork {
   int GetAction(float[] Inputs, int ActionMask[]) {
     LastInput = Inputs;
     float[] outputs = DeepQ.FeedForward(Inputs); 
-    println(outputs[0] + " " +outputs[1]+ " " +outputs[2]+ " " +outputs[3]+ " " +outputs[4]+ " : ");
+    //println(outputs[0] + " " +outputs[1]+ " " +outputs[2]+ " " +outputs[3]+ " " +outputs[4]+ " : ");
 
     double r = random(1.1);
 
